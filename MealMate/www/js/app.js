@@ -57,22 +57,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     controller: 'RegisterCtrl'
   })
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.restaurants', {
+    url: '/restaurants',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'tab-restaurants': {
+        templateUrl: 'templates/tab-restaurants.html',
+        controller: 'RestaurantsCtrl'
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.status', {
+      url: '/status',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-status': {
+          templateUrl: 'templates/tab-status.html',
+          controller: 'StatusCtrl'
         }
       }
     })

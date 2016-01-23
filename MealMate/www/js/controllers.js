@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('StatusCtrl', function($scope) {})
 
-.controller('ChatsCtrl', function($scope, Chats) {
+.controller('RestaurantsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -21,7 +21,7 @@ angular.module('starter.controllers', [])
 
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
-    $state.go('tab.dash');
+    $state.go('tab.status');
   };
 
 })
@@ -32,6 +32,7 @@ angular.module('starter.controllers', [])
     console.log('Register', user);
 
     //Insert Parse code here
+    $state.go('signin');
   }
 
 })
