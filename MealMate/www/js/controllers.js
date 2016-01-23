@@ -43,9 +43,59 @@ angular.module('starter.controllers', [])
     });
 
   };
-
 })
 
+.controller('DiningTimeCtrl', function ($scope, $ionicPopup) {
+
+    $scope.timePickerObjectFrom = {
+      fromEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
+      step: 15,  //Optional
+      format: 12,  //Optional
+      titleLabel: '12-hour Format',  //Optional
+      closeLabel: 'Close',  //Optional
+      setLabel: 'Set',  //Optional
+      setButtonType: 'button-positive',  //Optional
+      closeButtonType: 'button-stable',  //Optional
+      callback: function (val) {    //Mandatory
+        timePickerFromCallback(val);
+      }
+    };
+
+    $scope.timePickerObjectTo = {
+      toEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
+      step: 15,  //Optional
+      format: 12,  //Optional
+      titleLabel: '12-hour Format',  //Optional
+      closeLabel: 'Close',  //Optional
+      setLabel: 'Set',  //Optional
+      setButtonType: 'button-positive',  //Optional
+      closeButtonType: 'button-stable',  //Optional
+      callback: function (val) {    //Mandatory
+        timePickerToCallback(val);
+      }
+    };
+
+    function timePickerFromCallback(val) {
+      if (typeof (val) === 'undefined') {
+        console.log('Time not selected');
+      } else {
+        $scope.timePickerObjectFrom.fromEpochTime = val;
+        var selectedTime = new Date(val * 1000);
+        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+      }
+    }
+
+    function timePickerToCallback(val) {
+      if (typeof (val) === 'undefined') {
+        console.log('Time not selected');
+      } else {
+        $scope.timePickerObjectTo.toEpochTime = val;
+        var selectedTime = new Date(val * 1000);
+        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+      }
+    }
+
+  })
 
 .controller('RegisterCtrl', function($scope, $state) {
 

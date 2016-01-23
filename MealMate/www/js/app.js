@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ionic-timepicker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,10 +22,56 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
-    }    
+    }
 
   });
 })
+
+.directive('standardTimeMeridian', function () {
+    return {
+        restrict: 'AE',
+        replace: true,
+        scope: {
+            etime: '=etime'
+        },
+        template: "<strong>{{stime}}</strong>",
+        link: function (scope, elem, attrs) {
+
+            scope.stime = epochParser(scope.etime, 'time');
+
+            function prependZero(param) {
+                if (String(param).length < 2) {
+                    return "0" + String(param);
+                }
+                return param;
+            }
+
+            function epochParser(val, opType) {
+                if (val === null) {
+                    return "00:00";
+                } else {
+                    var meridian = ['AM', 'PM'];
+
+                    if (opType === 'time') {
+                        var hours = parseInt(val / 3600);
+                        var minutes = (val / 60) % 60;
+                        var hoursRes = hours > 12 ? (hours - 12) : hours;
+
+                        var currentMeridian = meridian[parseInt(hours / 12)];
+
+                        return (prependZero(hoursRes) + ":" + prependZero(minutes) + " " + currentMeridian);
+                    }
+                }
+            }
+
+            scope.$watch('etime', function (newValue, oldValue) {
+                scope.stime = epochParser(scope.etime, 'time');
+            });
+
+        }
+    };
+})
+
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -49,6 +95,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       templateUrl: 'templates/sign-in.html',
       controller: 'SignInCtrl'
     })
+
+  .state('diningtime', {
+    url: '/dining-time',
+    templateUrl: 'templates/dining-time.html',
+    controller: 'DiningTimeCtrl'
+  })
 
   .state('forgotpassword', {
     url: '/forgot-password',
@@ -103,4 +155,4 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/sign-in');
 
-});
+})

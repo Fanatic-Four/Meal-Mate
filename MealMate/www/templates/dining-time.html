@@ -1,0 +1,29 @@
+<ion-view view-title="Dining-Time">
+  <ion-content>
+    <div class="card">
+      <div class="item item-divider text-center">
+        When do you wanna eat?
+      </div>
+        <div class="item item-divider">
+          From
+        </div>
+        <div class="item item-text-wrap">
+          <ionic-timepicker input-obj="timePickerObjectFrom">
+            <button class="button button-block button-positive overflowShow">
+              <standard-time-meridian etime='timePickerObjectFrom.fromEpochTime'></standard-time-meridian>
+            </button>
+          </ionic-timepicker>
+        </div>
+        <div class="item item-divider">
+          To
+        </div>
+        <div class="item item-text-wrap">
+          <ionic-timepicker input-obj="timePickerObjectTo">
+            <button class="button button-block button-positive overflowShow">
+              <standard-time-meridian etime='timePickerObjectTo.toEpochTime'></standard-time-meridian>
+            </button>
+          </ionic-timepicker>
+        </div>
+      </div>
+  </ion-content>
+</ion-view>
