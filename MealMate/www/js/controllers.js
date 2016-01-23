@@ -2,7 +2,11 @@ angular.module('starter.controllers', [])
 
 .controller('StatusCtrl', function($scope) {
   console.log("Status Controller Activated");
-  
+
+  $scope.updates = ["No one is currently matched with you",
+                    "Click on restaurants if you are interested in eating with someone",
+                    "lets see",
+                    "ebola"];
 })
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
@@ -55,18 +59,18 @@ angular.module('starter.controllers', [])
     parse_user.set("description", user.description);
     parse_user.set("age", user.age);
     parse_user.set("interests", user.interests);
-    
+
     parse_user.signUp(null, {
       success : function(parse_user){
         console.log("Success!");
-        $state.go('signin');    
+        $state.go('signin');
       },
       error : function(parse_user, error){
         console.log("Error: " + error.code + " " + error.message);
       }
     });
 
-    
+
   }
 
 })
