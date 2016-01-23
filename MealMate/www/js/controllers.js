@@ -17,6 +17,15 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('SignInCtrl', function($scope, $state) {
+
+  $scope.signIn = function(user) {
+    console.log('Sign-In', user);
+    $state.go('tab.dash');
+  };
+
+})
+
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
