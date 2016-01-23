@@ -47,7 +47,7 @@
         }
 
     </style>
-    <button id="startrunning" ng-click="showMap()">Show Map!</button>
+    <button id="startrunning" ng-click="showMap()">Show Map</button>
     <!-- <ion-content> -->
     <div id="map"></div>
      <!--  </ion-content> -->
@@ -55,15 +55,17 @@
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="r in restaurants" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
         <!-- <img ng-src="{{chat.face}}"> -->
-        <h2>{{r.lat}}</h2>
-        <!-- <p>{{chat.lastText}}</p> -->
+        <h2>{{r.name}}</h2>
+<!--         <p>ID: {{r.id}}</p> -->
+        <p>Rating: {{r.rating}}</p>
+        <p>Open now: {{r.opening_hours.open_now}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+        <ion-option-button class="button-assertive" ng-click="remove(r)">
           Delete
         </ion-option-button>
       </ion-item>
     </ion-list>
-    <button ng-click="showRestaurant()">restaurants</button>
+    <button ng-click="showRestaurant()">Show restaurants</button>
   </ion-content>
 </ion-view>

@@ -115,7 +115,7 @@ angular.module('starter.controllers', [])
           if (status === google.maps.places.PlacesServiceStatus.OK) {
               for (var i = 0; i < results.length; i++) {
                   createMarker(results[i]);
-                  listRest.push(results[i].geometry.location);
+                  listRest.push(results[i]);
               }
           }
           console.log(listRest);
@@ -143,9 +143,9 @@ angular.module('starter.controllers', [])
     console.log($scope.restaurants);
   };
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  $scope.remove = function(r) {
+    // Chats.remove(chat);
+    console.log("Got to remove");
   };
 })
 
