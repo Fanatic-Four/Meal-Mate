@@ -26,6 +26,16 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('RegisterCtrl', function($scope, $state) {
+
+  $scope.register = function(user) {
+    console.log('Register', user);
+
+    //Insert Parse code here
+  }
+
+})
+
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
