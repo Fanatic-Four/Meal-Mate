@@ -26,6 +26,13 @@ angular.module('starter.controllers', [])
 
 .controller('SignInCtrl', function($scope, $state) {
 
+  //var parseUser = Parse.User.current();
+
+
+  if (parseUser != null) {
+    $state.go('tab.status');
+  }
+
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
@@ -34,6 +41,7 @@ angular.module('starter.controllers', [])
         // Do stuff after successful login.
         alert("Successfully logged in");
         $state.go('tab.status');
+        parseUser = Parse.User.current();
       },
       error: function(user, error) {
         alert("Error: " + error.code + " " + error.message);
