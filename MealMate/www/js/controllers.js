@@ -24,7 +24,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-// Not being used right now
 .controller('SignInCtrl', function($scope, $state) {
 
   $scope.signIn = function(user) {
@@ -32,16 +31,14 @@ angular.module('starter.controllers', [])
 
     Parse.User.logIn(user.username, user.password, {
       success: function(user) {
-        alert("success");
         // Do stuff after successful login.
-        console.log("Logged in");
+        alert("Successfully logged in");
         $state.go('tab.status');
       },
       error: function(user, error) {
-        alert("failure");
+        alert("Error: " + error.code + " " + error.message);
         // The login failed. Check error to see why.
-        console.log("failed to log in, " + error.code + error.message);
-        $state.go('tab.restaurants');
+        // $state.go('tab.restaurants');
       }
     });
 
@@ -49,24 +46,6 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ToastCtrl', function($scope, $state, $cordovaToast) {
-
-  // THIS IS THE ACTUAL LOGIN FUNCTION B/C OF TOAST
-  $scope.toastLogIn = function(user){
-    Parse.User.logIn(user.username, user.password, {
-      success: function(user) {
-        // Do stuff after successful login.
-        $cordovaToast.show('Log in successful', 'short', 'bottom');
-        $state.go('tab.status');
-      },
-      error: function(user, error) {
-        // The login failed. Check error to see why.
-        $cordovaToast.show('Error code:'+ error.code + " " + error.message, 'long', 'bottom');
-      }  
-    });
-  }
-
-})
 
 .controller('RegisterCtrl', function($scope, $state) {
 
