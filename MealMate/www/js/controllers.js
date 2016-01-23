@@ -4,9 +4,9 @@ angular.module('starter.controllers', [])
   console.log("Status Controller Activated");
 
   $scope.updates = ["No one is currently matched with you",
-                    "Click on restaurants if you are interested in eating with someone",
-                    "lets see",
-                    "ebola"];
+                    "Click on Restaurants if you are interested in eating with someone",
+                    "Click on Account to edit your profile description",
+                    "Happy eats!"];
 })
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
@@ -17,7 +17,6 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
 
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
@@ -30,19 +29,19 @@ angular.module('starter.controllers', [])
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
-    Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
-    Parse.User.logIn(user.username, user.password, {
-      success: function(user) {
-        // Do stuff after successful login.
-        console.log("Logged in");
+    // Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
+    // Parse.User.logIn(user.username, user.password, {
+    //   success: function(user) {
+    //     // Do stuff after successful login.
+    //     console.log("Logged in");
         $state.go('tab.status');
-      },
-      error: function(user, error) {
-        // The login failed. Check error to see why.
-        console.log("failed to log in, " + error.code + error.message);
-      }
-    });
-    
+      // },
+      // error: function(user, error) {
+      //   // The login failed. Check error to see why.
+      //   console.log("failed to log in, " + error.code + error.message);
+      // }
+    // });
+
   };
 
 })

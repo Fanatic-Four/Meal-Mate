@@ -18,3 +18,8 @@
   font: 18px;
   text-align: center;
 }
+
+a {
+  text-decoration: none;
+  color: #33CD5F;
+}
