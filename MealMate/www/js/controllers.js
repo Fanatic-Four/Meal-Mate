@@ -35,8 +35,25 @@ angular.module('starter.controllers', [])
   $scope.register = function(user) {
     console.log('Register', user);
 
-    //Insert Parse code here
-    $state.go('signin');
+    Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
+    var parse_user = new Parse.User();
+    parse_user.set("username", user.username);
+    parse_user.set("password", user.password);
+    parse_user.set("description", user.description);
+    parse_user.set("age", user.age);
+    parse_user.set("interests", user.interests);
+    
+    parse_user.signUp(null, {
+      success : function(parse_user){
+        console.log("Success!");
+        $state.go('signin');    
+      },
+      error : function(parse_user, error){
+        console.log("Error: " + error.code + " " + error.message);
+      }
+    });
+
+    
   }
 
 })
