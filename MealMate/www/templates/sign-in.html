@@ -10,20 +10,13 @@
         <input type="password" ng-model="user.password">
       </label>
     </div>
-    <div class="padding">
-      <button class="button button-block button-positive" ng-click="signIn(user)">
+    <div class="padding" ng-controller="ToastCtrl">
+      <button class="button button-block button-balanced" ng-click="toastLogIn(user)">
         Sign-In
       </button>
       <p class="text-center">
-        <a href="#/register">Register</a>
+        <a href="#/register" style="text-decoration: none; color: #33CD5F;">Register</a>
       </p>
     </div>
-
-    <div ng-controller="ToastCtrl">
-      <button ng-click="showToast()">button</button>
-      <button ng-click="toastLogIn(user)">try to sign in</button>
-    </div>
   </ion-content>
-
-  
 </ion-view>

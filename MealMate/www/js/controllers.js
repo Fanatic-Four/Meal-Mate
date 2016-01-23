@@ -4,9 +4,9 @@ angular.module('starter.controllers', [])
   console.log("Status Controller Activated");
 
   $scope.updates = ["No one is currently matched with you",
-                    "Click on restaurants if you are interested in eating with someone",
-                    "lets see",
-                    "ebola"];
+                    "Click on Restaurants if you are interested in eating with someone",
+                    "Click on Account to edit your profile description",
+                    "Happy eats!"];
 })
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
@@ -18,13 +18,13 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
 })
 
+// Not being used right now
 .controller('SignInCtrl', function($scope, $state) {
 
   $scope.signIn = function(user) {
@@ -32,60 +32,37 @@ angular.module('starter.controllers', [])
 
     Parse.User.logIn(user.username, user.password, {
       success: function(user) {
+        alert("success");
         // Do stuff after successful login.
         console.log("Logged in");
         $state.go('tab.status');
       },
       error: function(user, error) {
+        alert("failure");
         // The login failed. Check error to see why.
         console.log("failed to log in, " + error.code + error.message);
+        $state.go('tab.restaurants');
       }
     });
-    
+
   };
 
 })
 
-.controller('ToastCtrl', function($scope, $cordovaToast) {
+.controller('ToastCtrl', function($scope, $state, $cordovaToast) {
 
+  // THIS IS THE ACTUAL LOGIN FUNCTION B/C OF TOAST
   $scope.toastLogIn = function(user){
     Parse.User.logIn(user.username, user.password, {
       success: function(user) {
         // Do stuff after successful login.
-        console.log("Logged in");
+        $cordovaToast.show('Log in successful', 'short', 'bottom');
         $state.go('tab.status');
       },
       error: function(user, error) {
         // The login failed. Check error to see why.
-        $cordovaToast
-          .show('Error code:'+ error.code + " " + error.message, 'long', 'bottom')
-          .then(function(success) {
-            // success
-            console.log("yay");
-          }, function (error) {
-            // error
-        });
-        console.log("failed to log in, " + error.code + error.message);
+        $cordovaToast.show('Error code:'+ error.code + " " + error.message, 'long', 'bottom');
       }  
-    }) //close parse
-    .then(function(success) {
-      $cordovaToast.show('hi', 'long', 'bottom')
-          .then(function(success) {
-            // success
-            console.log("yay");
-          }, function (error) {
-            // error
-        });
-    }, function(error) {
-
-    });
-  }
-
-  $scope.showToast = function(){
-    $cordovaToast.show('TOOOOAST', 'long', 'bottom').then(function(success){
-      //yay
-    }, function(error){
-      //nooo
     });
   }
 
