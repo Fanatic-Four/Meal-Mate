@@ -12,3 +12,9 @@
   -webkit-animation-duration:0;
   animation-duration:0;
 }
+
+.status-item {
+  padding: 5px;
+  font: 18px;
+  text-align: center;
+}

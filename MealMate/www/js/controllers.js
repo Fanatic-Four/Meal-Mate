@@ -3,7 +3,10 @@ angular.module('starter.controllers', [])
 .controller('StatusCtrl', function($scope) {
   console.log("Status Controller Activated");
 
-  $scope.stuff = ["hello", "goodbye", "lets see", "ebola"];
+  $scope.updates = ["No one is currently matched with you",
+                    "Click on restaurants if you are interested in eating with someone",
+                    "lets see",
+                    "ebola"];
 })
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
