@@ -1,6 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('StatusCtrl', function($scope) {})
+.controller('StatusCtrl', function($scope) {
+  console.log("Status Controller Activated");
+  
+})
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -10,6 +13,7 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+
 
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
