@@ -87,7 +87,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+  parseUser = Parse.User.current();
+  console.log(parseUser);
+  $scope.username = parseUser.get("username");
+  $scope.age = parseUser.get("age");
+  $scope.description = parseUser.get("description");
+  $scope.interests = parseUser.get("interests");
+  $scope.isWaiting = parseUser.get("isWaiting");  
 });
