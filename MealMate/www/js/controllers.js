@@ -10,19 +10,21 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  console.log("lsdjkf");
+  
+  $scope.restaurants = null;
+
   $scope.showMap = function(){
-    console.log("Heyyyyy");
       // google map
       var map;
       // variables holding origin latitude and longitude
       var orig;
       // info window for marker
       var infowindow;
+      // list of restaurant
+      var listRest;
       
       initSearch();
       function initSearch() {
-          console.log("Hey I'm here");
           // initialize map
           map = new google.maps.Map(document.getElementById('map'), {
               center: {lat: 42.2579438, lng: -72.5785799},
@@ -78,21 +80,22 @@ angular.module('starter.controllers', [])
                   // set orig to be LatLng type
                   orig = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
                   console.log(orig);
+                  if(orig != null){
+                    console.log("finding POI");
+                    listRest = new Array();
+                    findPOI();
+                  }
               });
               // adjust map view
               map.fitBounds(bounds);
               map.setZoom(12);
           });
-
-          if (orig != null){
-            findPOI();
-          }
       }
 
       // find restaurant around place
       function findPOI() {
           // recenter and zoom on map
-          map.setCenter(dest);
+          map.setCenter(orig);
           map.setZoom(14);
 
           // initialize info window
@@ -112,8 +115,11 @@ angular.module('starter.controllers', [])
           if (status === google.maps.places.PlacesServiceStatus.OK) {
               for (var i = 0; i < results.length; i++) {
                   createMarker(results[i]);
+                  listRest.push(results[i].geometry.location);
               }
           }
+          console.log(listRest);
+          $scope.restaurants = listRest;
       }
 
       // create marker for place
@@ -131,6 +137,11 @@ angular.module('starter.controllers', [])
           });
       }
   }
+  
+
+  $scope.showRestaurant = function(){
+    console.log($scope.restaurants);
+  };
 
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {

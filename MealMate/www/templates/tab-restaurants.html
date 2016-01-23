@@ -1,6 +1,6 @@
 <ion-view view-title="Restaurants">
   <ion-content>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTykhqPRDwmI1ix25cA345iL1GkV-fYw0&libraries=places&callback=initSearch"
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTykhqPRDwmI1ix25cA345iL1GkV-fYw0&libraries=places"
         async defer></script>
 
         <style>
@@ -11,7 +11,7 @@
         }
 
         #map {
-            height: 100%;
+            height: 50%;
         }
 
         .controls {
@@ -47,35 +47,23 @@
         }
 
     </style>
+    <button id="startrunning" ng-click="showMap()">Show Map!</button>
     <!-- <ion-content> -->
     <div id="map"></div>
      <!--  </ion-content> -->
     <input id="origin-input" class="controls" type="text" placeholder="Origin">
-    <body onload="submit()">
-    <form id="submitForm">
-        <button id="startrunning" ng-click="showMap()"></button>
-    </form>
-
-    <script type="text/javascript">
-    function submit()
-    {
-        document.getElementById("startrunning").click(); // Simulates button click
-        document.submitForm.submit(); // Submits the form without the button
-    }
-    </script>
-    </body>
-
-  <!--   <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="r in restaurants" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+        <!-- <img ng-src="{{chat.face}}"> -->
+        <h2>{{r.lat}}</h2>
+        <!-- <p>{{chat.lastText}}</p> -->
         <i class="icon ion-chevron-right icon-accessory"></i>
 
         <ion-option-button class="button-assertive" ng-click="remove(chat)">
           Delete
         </ion-option-button>
       </ion-item>
-    </ion-list> -->
+    </ion-list>
+    <button ng-click="showRestaurant()">restaurants</button>
   </ion-content>
 </ion-view>
