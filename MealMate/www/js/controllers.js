@@ -176,7 +176,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams) {
-  $scope.curr_restaurant = $stateParams.restaurant;
+  $scope.rName = $stateParams.rName;
+  $scope.rId = $stateParams.rId
   console.log($stateParams);
   console.log("in detail controller");
 })
