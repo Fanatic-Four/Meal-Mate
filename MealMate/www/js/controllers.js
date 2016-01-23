@@ -30,7 +30,6 @@ angular.module('starter.controllers', [])
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
-    Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
     Parse.User.logIn(user.username, user.password, {
       success: function(user) {
         // Do stuff after successful login.
@@ -47,12 +46,56 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('ToastCtrl', function($scope, $cordovaToast) {
+
+  $scope.toastLogIn = function(user){
+    Parse.User.logIn(user.username, user.password, {
+      success: function(user) {
+        // Do stuff after successful login.
+        console.log("Logged in");
+        $state.go('tab.status');
+      },
+      error: function(user, error) {
+        // The login failed. Check error to see why.
+        $cordovaToast
+          .show('Error code:'+ error.code + " " + error.message, 'long', 'bottom')
+          .then(function(success) {
+            // success
+            console.log("yay");
+          }, function (error) {
+            // error
+        });
+        console.log("failed to log in, " + error.code + error.message);
+      }  
+    }) //close parse
+    .then(function(success) {
+      $cordovaToast.show('hi', 'long', 'bottom')
+          .then(function(success) {
+            // success
+            console.log("yay");
+          }, function (error) {
+            // error
+        });
+    }, function(error) {
+
+    });
+  }
+
+  $scope.showToast = function(){
+    $cordovaToast.show('TOOOOAST', 'long', 'bottom').then(function(success){
+      //yay
+    }, function(error){
+      //nooo
+    });
+  }
+
+})
+
 .controller('RegisterCtrl', function($scope, $state) {
 
   $scope.register = function(user) {
     console.log('Register', user);
 
-    Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
     var parse_user = new Parse.User();
     parse_user.set("username", user.username);
     parse_user.set("password", user.password);
