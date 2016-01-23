@@ -21,7 +21,20 @@ angular.module('starter.controllers', [])
 
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
-    $state.go('tab.status');
+
+    Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
+    Parse.User.logIn(user.username, user.password, {
+      success: function(user) {
+        // Do stuff after successful login.
+        console.log("Logged in");
+        $state.go('tab.status');
+      },
+      error: function(user, error) {
+        // The login failed. Check error to see why.
+        console.log("failed to log in, " + error.code + error.message);
+      }
+    });
+    
   };
 
 })
