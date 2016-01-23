@@ -46,6 +46,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       controller: 'SignInCtrl'
     })
 
+  .state('forgotpassword', {
+    url: '/forgot-password',
+    templateUrl: 'templates/forgot-password.html'
+  })
+
+  .state('register', {
+    url: '/register',
+    templateUrl: 'templates/register.html'
+  })
+
   .state('tab.dash', {
     url: '/dash',
     views: {
