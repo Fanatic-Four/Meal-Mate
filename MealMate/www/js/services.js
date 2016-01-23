@@ -1,3 +1,4 @@
+console.log("Got in services");
 angular.module('starter.services', [])
 
 .factory('Chats', function() {
