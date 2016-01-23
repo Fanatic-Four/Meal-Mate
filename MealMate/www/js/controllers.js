@@ -2,15 +2,16 @@ angular.module('starter.controllers', [])
 
 .controller('StatusCtrl', function($scope) {})
 
-.controller('RestaurantsCtrl', function($scope, Chats) {
+.controller('RestaurantsCtrl', function($scope, $state, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-  
+  $scope.$on('$ionicView.enter', function(e) {
+    console.log("banana");
+  });
+
   $scope.restaurants = null;
 
   $scope.showMap = function(){
@@ -22,7 +23,7 @@ angular.module('starter.controllers', [])
       var infowindow;
       // list of restaurant
       var listRest;
-      
+
       initSearch();
       function initSearch() {
           // initialize map
@@ -137,7 +138,7 @@ angular.module('starter.controllers', [])
           });
       }
   }
-  
+
 
   $scope.showRestaurant = function(){
     console.log($scope.restaurants);
@@ -146,6 +147,11 @@ angular.module('starter.controllers', [])
   $scope.remove = function(r) {
     // Chats.remove(chat);
     console.log("Got to remove");
+  };
+
+  $scope.navigateToDetails = function(r){
+    console.log(r);
+    $state.go('tab.chat-detail', {restaurant : r});
   };
 })
 
@@ -169,8 +175,10 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('ChatDetailCtrl', function($scope, $stateParams) {
+  $scope.curr_restaurant = $stateParams.restaurant;
+  console.log($stateParams);
+  console.log("in detail controller");
 })
 
 .controller('AccountCtrl', function($scope) {

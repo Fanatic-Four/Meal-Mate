@@ -53,10 +53,13 @@
      <!--  </ion-content> -->
     <input id="origin-input" class="controls" type="text" placeholder="Origin">
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="r in restaurants" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+      <ion-item class="item-remove-animate item-avatar item-icon-right"
+        ng-repeat="r in restaurants"
+        type="item-text-wrap"
+        href="#/tab/restaurant/{{r.id}}"
+        ng-click="navigateToDetails(r)">
         <!-- <img ng-src="{{chat.face}}"> -->
         <h2>{{r.name}}</h2>
-<!--         <p>ID: {{r.id}}</p> -->
         <p>Rating: {{r.rating}}</p>
         <p>Open now: {{r.opening_hours.open_now}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
