@@ -33,8 +33,8 @@
 }
 
 .status-item3.ng-enter {
-  -webkit-animation: fadeInRight 1s;
-  animation: fadeInRight 1s;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
 }
 
 .status-item3.ng-enter-stagger {
