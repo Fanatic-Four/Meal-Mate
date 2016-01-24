@@ -479,21 +479,17 @@ angular.module('starter.controllers', [])
             if(person.id != Parse.User.current().id){
               $scope.userObjects.push(person);
               var WaitingTime = Parse.Object.extend("WaitingTime");
-              console.log(WaitingTime);
               var queryTime = new Parse.Query(WaitingTime);
-              console.log(queryTime);
-              console.log(queryTime.equalTo("userId", user.id));
-              console.log(user.id);
               queryTime.equalTo("userId", user.id)
               .find({
                 success: function(entry){
-                  console.log(entry);
-                  console.log(new Date(entry[0].get("from")));
-                  console.log(new Date(entry[0].get("to")));
                   var timeFrom = new Date(entry[0].get("from"));
                   var timeTo = new Date(entry[0].get("to"));
                   // var fromHour = ti
-                  time = timeFrom.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1") + " - " + timeTo.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                  time = convertUTCDateToLocalDate(timeFrom).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+                    + " - "
+                    + convertUTCDateToLocalDate(timeTo).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                  //time = convertUTCDateToLocalDate(timeFrom) + " - " + convertUTCDateToLocalDate(timeTo);
                   $scope.users_waiting.push({name: person.getUsername(), time: time});
                 }
               })
@@ -501,6 +497,17 @@ angular.module('starter.controllers', [])
 
           }
         })
+      }
+
+      function convertUTCDateToLocalDate(date) {
+          var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+          var offset = date.getTimezoneOffset() / 60;
+          var hours = date.getHours();
+
+          newDate.setHours(hours - offset);
+
+          return newDate;
       }
     },
   });
