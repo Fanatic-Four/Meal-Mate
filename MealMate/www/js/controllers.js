@@ -296,6 +296,30 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('ChatCtrl', function($scope, $state, $ionicPopup, Messages) {
+
+  $scope.messages = Messages;
+
+  $scope.addMessage = function() {
+
+   $ionicPopup.prompt({
+     title: 'Need to get something off your chest?',
+     template: 'Let everybody know!'
+   }).then(function(res) {
+      $scope.messages.$add({
+        "message": res
+      });
+   });
+  };
+
+  $scope.logout = function() {
+    var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+    ref.unauth();
+    $state.go('login');
+  };
+
+})
+
 .controller('ChatDetailCtrl', function($scope, $stateParams, $state) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId
@@ -303,7 +327,7 @@ angular.module('starter.controllers', [])
   console.log("in detail controller");
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $state) {
   parseUser = Parse.User.current();
   console.log(parseUser);
   $scope.username = parseUser.get("username");
@@ -315,5 +339,9 @@ angular.module('starter.controllers', [])
   $scope.logOut = function() {
     Parse.User.logOut();
     $state.go('signin')
+  }
+
+  $scope.chat = function() {
+    $state.go('chat');
   }
 });

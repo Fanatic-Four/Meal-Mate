@@ -10,7 +10,7 @@ var parseUser;
 // Parse initialize
 Parse.initialize("IxUGKoEGXw4yRCHU4o2l666D2WB5tyTViCZ6AcdP", "tFMhtD8QpEu5bAiZb5fyEYq5kNV7uCBpIJxgRiXh");
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ionic-timepicker'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ionic-timepicker', 'firebase'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -98,6 +98,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       templateUrl: 'templates/sign-in.html',
       controller: 'SignInCtrl'
     })
+
+  .state('chat', {
+    url: '/chat',
+    templateUrl: 'templates/chat.html',
+    controller: 'ChatCtrl'
+  })
 
   .state('diningtime', {
     url: '/dining-time',
