@@ -395,6 +395,7 @@ angular.module('starter.controllers', [])
   $scope.logOut = function() {
     Parse.User.logOut().then(function() {
       $state.go('signin');
+      console.log("Sign in page redirect");
     });
   }
 
