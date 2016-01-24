@@ -327,6 +327,30 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('ChatCtrl', function($scope, $state, $ionicPopup, Messages) {
+
+  $scope.messages = Messages;
+
+  $scope.addMessage = function() {
+
+   $ionicPopup.prompt({
+     title: 'Need to get something off your chest?',
+     template: 'Let everybody know!'
+   }).then(function(res) {
+      $scope.messages.$add({
+        "message": res
+      });
+   });
+  };
+
+  $scope.logout = function() {
+    var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+    ref.unauth();
+    $state.go('login');
+  };
+
+})
+
 .controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId;
@@ -348,15 +372,20 @@ angular.module('starter.controllers', [])
     r.save();
     // TODO : check if this restaurant is already in the database
 
+
     var WaitingList = Parse.Object.extend("WaitingList");
     var waiting_list = new WaitingList();
-    waiting_list.set("user", parseUser);
-    waiting_list.set("restaurant", r);
+    waiting_list.set("userId", parseUser.id);
+    waiting_list.set("restaurantId", $scope.rId);
+    waiting_list.set("restaurantName", $scope.rName);
     waiting_list.save();
+    console.log(waiting_list);
+
+    alert("You are waiting at " + $scope.rName);
   }
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $state) {
   parseUser = Parse.User.current();
   console.log(parseUser);
   $scope.username = parseUser.get("username");
@@ -364,4 +393,13 @@ angular.module('starter.controllers', [])
   $scope.description = parseUser.get("description");
   $scope.interests = parseUser.get("interests");
   $scope.isWaiting = parseUser.get("isWaiting");
+
+  $scope.logOut = function() {
+    Parse.User.logOut();
+    $state.go('signin')
+  }
+
+  $scope.chat = function() {
+    $state.go('chat');
+  }
 });
