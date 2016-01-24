@@ -34,6 +34,33 @@ angular.module('starter.controllers', [])
     });
   }
 
+  else {
+    // console.log("hi");
+    $scope.match = null;
+
+    var Joined = Parse.Object.extend("Joined");
+    var jQuery = new Parse.Query(Joined);
+    jQuery.find({
+      success: function(entries){
+        var curr = Parse.User.current();
+
+        for(var i = 0; i < entries.length; i++){
+          console.log(entries[i].get("user2").getUsername());
+          if(entries[i].get("user1").id == curr.id){
+            console.log("display user2")
+            $scope.match = entries[i].get("user2").getUsername();
+            console.log($scope.match);
+          }
+          else if(entries[i].get("user2").id == curr.objectId){
+            console.log("display user1") 
+            $scope.match = entries[i].get("user1").getUsername();
+          }
+        }
+      }
+    })
+  }
+
+
   $scope.updateList = function() {
     console.log($scope.restaurants);
   }
@@ -478,7 +505,7 @@ angular.module('starter.controllers', [])
     curr.set("isWaiting", "no");
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
-    $state.go('tab.status');
+    // $state.go('tab.status');
   } //end join function
 
   $scope.wait = function(){
