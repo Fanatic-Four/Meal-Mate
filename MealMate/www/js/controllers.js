@@ -20,6 +20,7 @@ angular.module('starter.controllers', [])
     });
     */
     $scope.$broadcast('scroll.refreshComplete');
+    window.location = "index.html";    
  };
 
   if (parseUser.get("isWaiting") == "yes") {
