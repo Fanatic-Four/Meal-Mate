@@ -1,6 +1,11 @@
 // console.log("Got in services");
 angular.module('starter.services', [])
 
+.factory('Messages', function($firebaseArray) {
+  var messagesRef = new Firebase("https://burning-fire-7390.firebaseio.com");
+  return $firebaseArray(messagesRef);
+})
+
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 
