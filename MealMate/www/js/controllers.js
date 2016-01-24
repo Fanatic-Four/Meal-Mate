@@ -23,7 +23,7 @@ angular.module('starter.controllers', [])
     $scope.$broadcast('scroll.refreshComplete');
     window.location = "index.html";
  };
-  $scope.isWaiting = parseUser.get("isWaiting"); 
+  $scope.isWaiting = parseUser.get("isWaiting");
   if (parseUser.get("isWaiting") == "yes") {
     var WaitingList = Parse.Object.extend("WaitingList");
     var query = new Parse.Query(WaitingList);
@@ -641,5 +641,9 @@ angular.module('starter.controllers', [])
 
   $scope.chat = function() {
     $state.go('chat');
+  }
+
+  $scope.setdiningtime = function() {
+    $state.go('diningtime');
   }
 });
