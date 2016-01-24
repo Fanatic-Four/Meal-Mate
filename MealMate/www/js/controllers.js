@@ -1,12 +1,28 @@
 angular.module('starter.controllers', [])
 
-.controller('StatusCtrl', function($scope) {
+.controller('StatusCtrl', function($scope, $state) {
   console.log("Status Controller Activated");
 
-  $scope.updates = ["No one is currently matched with you.",
-  "Click on Restaurants if you are interested in eating with someone",
-  "Click on Account to edit your profile description",
-  "Happy eats!"];
+  $scope.updates = [
+    "Click on Restaurants if you are interested in eating with someone",
+    "Click on Account to edit your profile description",
+    "Happy eats!"
+  ];
+
+  $scope.doRefresh = function() {
+    /*
+   $http.get('/new-items')
+    .success(function(newItems) {
+      $scope.items = newItems;
+    })
+    .finally(function() {
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+    */
+    $scope.$broadcast('scroll.refreshComplete');
+    window.location = "index.html";
+ };
 
   if (parseUser.get("isWaiting") == "yes") {
     var WaitingList = Parse.Object.extend("WaitingList");
@@ -68,6 +84,10 @@ angular.module('starter.controllers', [])
         }
       }
     })
+  }
+
+  $scope.chat = function() {
+    $state.go('chat');
   }
 
   $scope.delete = function(restaurantId) {
@@ -415,7 +435,7 @@ angular.module('starter.controllers', [])
   $scope.logout = function() {
     var ref = new Firebase("https://burning-fire-7390.firebaseio.com");
     ref.unauth();
-    $state.go('login');
+    $state.go('tab.status');
   };
 
 })
@@ -525,7 +545,9 @@ angular.module('starter.controllers', [])
     curr.set("isWaiting", "no");
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
-    // $state.go('tab.status');
+    $state.go('tab.status');
+    window.location = "index.html";
+
   } //end join function
 
   $scope.wait = function(){

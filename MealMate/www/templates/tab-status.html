@@ -7,6 +7,12 @@
       </h2>
     </div>
 
+    <div style="text-align: center;">
+      <div ng-repeat="update in updates" class="list status-item3">
+        {{update}}
+      </div>
+    </div>
+
     <div class="card" ng-if="restaurants.length!=0 && isWaiting == 'yes'">
       <div class="item item-divider item-button-right">
         You are waiting at..
@@ -35,14 +41,44 @@
     </div>
 
     <div class="card" ng-if="isWaiting != 'yes'">
-      {{match.get("username")}}
-    </div>
 
-    <div style="text-align: center;">
-      <div ng-repeat="update in updates" class="list">
-        {{update}}
+      <div class="item item-divider item-button-right">
+        Your Meal Mate is <strong>{{match.get("username")}}</strong>
       </div>
-    </div>
+        <div class="list card">
+
+          <div class="item">
+            <span style="float: left">
+              Age
+            </span>
+            <span style="float: right">
+              {{match.get("age")}}
+            </span>
+          </div>
+          <div class="item">
+            <span style="float: left">
+              Interests
+            </span>
+            <span style="float: right">
+              {{match.get("interests")}}
+            </span>
+        </div>
+
+        <div class="item">
+          <span style="float: left">
+            Profile Description
+          </span>
+          <br>
+          <div style="overflow-x: visible">
+            <p>
+              {{match.get("description")}}
+            </p>
+          </div>
+        </div>
+        <div class="item" style="text-align: center;" ng-click="chat()">
+          Chat
+        </div>
+      </div>
 
     <script>
     </script>
