@@ -357,9 +357,34 @@ angular.module('starter.controllers', [])
   console.log($stateParams);
   console.log("in detail controller");
 
+  var WaitingList = Parse.Object.extend("WaitingList");
+  var query = new Parse.Query(WaitingList);
+  query.equalTo('restaurantId', $scope.rId);
+
+  var User = Parse.Object.extend("User");
+  var uQuery = new Parse.Query(User);
+
+  $scope.users_waiting = [];
+
+  query.find({
+    success: function(results) {
+      for (var i = 0; i < results.length; i++) {
+        var id = results[i].get("userId");
+
+        uQuery.get(id, {
+          success : function(result) {
+            $scope.users_waiting.push(result);
+            console.log(result);
+          }
+        })
+      }
+    },
+    });
+
   $scope.join = function(){
     console.log("Clicked to join");
     console.log($scope.rId);
+    console.log($scope.users_waiting);
   }
 
   $scope.wait = function(){

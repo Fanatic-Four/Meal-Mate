@@ -12,5 +12,14 @@
     </p>
     <button id="join" ng-click="join()">Join</button>
     <button id="wait" ng-click="wait()">Wait</button>
+
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right"
+                collection-repeat="user in users_waiting"
+                type="item-text-wrap">
+          <h2>{{user.username}}</h2>
+      </ion-item>
+    </ion-list>
+
   </ion-content>
 </ion-view>
