@@ -204,12 +204,12 @@ angular.module('starter.controllers', [])
           // Do stuff after successful login.
           console.log(user.get("isWaiting"));
           console.log(user.get("isWaiting") == 'yes');
+          parseUser = Parse.User.current();
           if(user.get("isWaiting") == 'yes') {
             $state.go('tab.status');
           } else {
             $state.go('diningtime');
           }
-          parseUser = Parse.User.current();
         },
         error: function(user, error) {
           console.log("Error: " + error.code + " " + error.message);
@@ -357,7 +357,7 @@ angular.module('starter.controllers', [])
   $scope.rAddr = $stateParams.rAddr;
   $scope.rRating = $stateParams.rRating;
   $scope.rPrice = $stateParams.rPrice;
-  $scope.rAddr = $stateParams.rAddr;  
+  $scope.rAddr = $stateParams.rAddr;
 
   console.log($stateParams);
   console.log("in detail controller");
