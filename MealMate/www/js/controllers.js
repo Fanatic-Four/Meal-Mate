@@ -354,6 +354,7 @@ angular.module('starter.controllers', [])
 .controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId;
+  $scope.rAddr = $stateParams.rAddr;
   console.log($stateParams);
   console.log("in detail controller");
 
@@ -369,6 +370,7 @@ angular.module('starter.controllers', [])
     var r = new Restaurant();
     r.set("restaurantId", $scope.rId);
     r.set("name", $scope.rName);
+    r.set("address", $scope.rAddr);
     r.save();
     console.log(r);
     // TODO : check if this restaurant is already in the database
@@ -380,6 +382,8 @@ angular.module('starter.controllers', [])
     waiting_list.set("restaurant", r);
     waiting_list.save();
     console.log(waiting_list);
+
+    alert("You are waiting at " + $scope.rName);
   }
 })
 
