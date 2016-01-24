@@ -333,14 +333,14 @@ angular.module('starter.controllers', [])
 
   $scope.addMessage = function() {
 
-   $ionicPopup.prompt({
-     title: 'Need to get something off your chest?',
-     template: 'Let everybody know!'
-   }).then(function(res) {
+    $ionicPopup.prompt({
+      title: 'Need to get something off your chest?',
+      template: 'Let everybody know!'
+    }).then(function(res) {
       $scope.messages.$add({
         "message": res
       });
-   });
+    });
   };
 
   $scope.logout = function() {
@@ -395,18 +395,16 @@ angular.module('starter.controllers', [])
     r.set("restaurantId", $scope.rId);
     r.set("name", $scope.rName);
     r.save();
+    console.log(r);
     // TODO : check if this restaurant is already in the database
 
 
     var WaitingList = Parse.Object.extend("WaitingList");
     var waiting_list = new WaitingList();
-    waiting_list.set("userId", parseUser.id);
-    waiting_list.set("restaurantId", $scope.rId);
-    waiting_list.set("restaurantName", $scope.rName);
+    waiting_list.set("user", parseUser);
+    waiting_list.set("restaurant", r);
     waiting_list.save();
     console.log(waiting_list);
-
-    alert("You are waiting at " + $scope.rName);
   }
 })
 
