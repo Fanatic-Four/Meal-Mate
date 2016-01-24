@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
 .controller('StatusCtrl', function($scope) {
   console.log("Status Controller Activated");
 
-  $scope.updates = ["No one is currently matched with you",
+  $scope.updates = ["No one is currently matched with you.",
   "Click on Restaurants if you are interested in eating with someone",
   "Click on Account to edit your profile description",
   "Happy eats!"];
@@ -354,12 +354,51 @@ angular.module('starter.controllers', [])
 .controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId;
+  $scope.rAddr = $stateParams.rAddr;
+  $scope.rRating = $stateParams.rRating;
+  $scope.rPrice = $stateParams.rPrice;
+  $scope.rAddr = $stateParams.rAddr;
+
   console.log($stateParams);
   console.log("in detail controller");
+
+  var WaitingList = Parse.Object.extend("WaitingList");
+  var query = new Parse.Query(WaitingList);
+
+  var Restaurant = Parse.Object.extend("Restaurant");
+  var rQuery = new Parse.Query(Restaurant);
+  rQuery.equalTo("restaurantId", $scope.rId);
+  rQuery.find({
+    success: function(rest){
+      query.equalTo('restaurant', rest);
+    }
+  });
+
+  var uQuery = new Parse.Query(Parse.User);
+
+  $scope.users_waiting = [];
+
+  query.find({
+    success: function(results) {
+      //Results is all the rows of the target restaurant
+      console.log(results);
+      for (var i = 0; i < results.length; i++) {
+        var user = results[i].get("user");
+        uQuery.get(user.id, {
+          success: function(person){
+            $scope.users_waiting.push(person.getUsername());
+          }
+        })
+
+
+      }
+    },
+    });
 
   $scope.join = function(){
     console.log("Clicked to join");
     console.log($scope.rId);
+    console.log($scope.users_waiting);
   }
 
   $scope.wait = function(){
@@ -416,6 +455,7 @@ angular.module('starter.controllers', [])
   $scope.logOut = function() {
     Parse.User.logOut().then(function() {
       $state.go('signin');
+      console.log("Sign in page redirect");
     });
   }
 
