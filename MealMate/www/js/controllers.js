@@ -7,6 +7,37 @@ angular.module('starter.controllers', [])
   "Click on Restaurants if you are interested in eating with someone",
   "Click on Account to edit your profile description",
   "Happy eats!"];
+
+  if (parseUser.get("isWaiting") == "yes") {
+    var WaitingList = Parse.Object.extend("WaitingList");
+    var query = new Parse.Query(WaitingList);
+    query.equalTo('user', parseUser);
+
+    var Restaurant = Parse.Object.extend("Restaurant");
+    var rQuery = new Parse.Query(Restaurant);
+
+    $scope.restaurants = [];
+
+    query.find({
+      success: function(results) {
+        for (var i = 0; i < results.length; i++) {
+          var restaurant = results[i].get("restaurant");
+          console.log(restaurant.id);
+          rQuery.get(restaurant.id, {
+            success : function(rest) {
+              $scope.restaurants.push(rest);
+              console.log(rest.get("name"));
+            }
+          })
+        }
+      },
+    });
+  }
+
+  $scope.updateList = function() {
+    console.log($scope.restaurants);
+  }
+
 })
 
 .controller('RestaurantsCtrl', function($scope, $state, Chats) {
@@ -33,120 +64,120 @@ angular.module('starter.controllers', [])
 
   initSearch();
   function initSearch() {
-      // initialize map
-      map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 42.2579438, lng: -72.5785799},
-          zoom: 8,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true
+    // initialize map
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 42.2579438, lng: -72.5785799},
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true
+    });
+
+    angular.element(document.getElementById('map')).attr('data-tap-disabled', 'true');
+
+    // Create the origin search box and link it to the UI element.
+    var origin = document.getElementById('origin-input');
+    var oriSearchBox = new google.maps.places.SearchBox(origin);
+    // push the oriSearchBox to the map
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function () {
+      oriSearchBox.setBounds(map.getBounds());
+    });
+
+    // an array of marker on map
+    var markers = [];
+
+    // Listen for the event fired when the user selects a prediction
+    // retrieve more details for that place.
+    oriSearchBox.addListener('places_changed', function () {
+      var oriplaces = oriSearchBox.getPlaces();
+
+      if (oriplaces.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      markers.forEach(function (marker) {
+        marker.setMap(null);
       });
+      markers = [];
 
-      angular.element(document.getElementById('map')).attr('data-tap-disabled', 'true');
+      // For each place, get name and location.
+      var bounds = new google.maps.LatLngBounds();
+      oriplaces.forEach(function (place) {
+        // Create a marker for each place.
+        markers.push(new google.maps.Marker({
+          map: map,
+          title: place.name,
+          position: place.geometry.location
+        }));
 
-      // Create the origin search box and link it to the UI element.
-      var origin = document.getElementById('origin-input');
-      var oriSearchBox = new google.maps.places.SearchBox(origin);
-      // push the oriSearchBox to the map
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin);
-
-      // Bias the SearchBox results towards current map's viewport.
-      map.addListener('bounds_changed', function () {
-          oriSearchBox.setBounds(map.getBounds());
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+        // set orig to be LatLng type
+        orig = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+        console.log(orig);
+        if(orig != null){
+          console.log("finding POI");
+          listRest = new Array();
+          findPOI();
+        }
       });
-
-      // an array of marker on map
-      var markers = [];
-
-      // Listen for the event fired when the user selects a prediction
-      // retrieve more details for that place.
-      oriSearchBox.addListener('places_changed', function () {
-          var oriplaces = oriSearchBox.getPlaces();
-
-          if (oriplaces.length == 0) {
-              return;
-          }
-
-          // Clear out the old markers.
-          markers.forEach(function (marker) {
-              marker.setMap(null);
-          });
-          markers = [];
-
-          // For each place, get name and location.
-          var bounds = new google.maps.LatLngBounds();
-          oriplaces.forEach(function (place) {
-              // Create a marker for each place.
-              markers.push(new google.maps.Marker({
-                  map: map,
-                  title: place.name,
-                  position: place.geometry.location
-              }));
-
-              if (place.geometry.viewport) {
-                  // Only geocodes have viewport.
-                  bounds.union(place.geometry.viewport);
-              } else {
-                  bounds.extend(place.geometry.location);
-              }
-              // set orig to be LatLng type
-              orig = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
-              console.log(orig);
-              if(orig != null){
-                console.log("finding POI");
-                listRest = new Array();
-                findPOI();
-              }
-          });
-          // adjust map view
-          map.fitBounds(bounds);
-          map.setZoom(12);
-      });
+      // adjust map view
+      map.fitBounds(bounds);
+      map.setZoom(12);
+    });
   }
 
   // find restaurant around place
   function findPOI() {
-      // recenter and zoom on map
-      map.setCenter(orig);
-      map.setZoom(14);
+    // recenter and zoom on map
+    map.setCenter(orig);
+    map.setZoom(14);
 
-      // initialize info window
-      infowindow = new google.maps.InfoWindow();
+    // initialize info window
+    infowindow = new google.maps.InfoWindow();
 
-      // create new service for search
-      var service = new google.maps.places.PlacesService(map);
-      service.nearbySearch({
-          location: orig,
-          radius: 2000,
-          types: ['restaurant']
-      }, callback);
+    // create new service for search
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch({
+      location: orig,
+      radius: 2000,
+      types: ['restaurant']
+    }, callback);
   }
 
   // function called when search
   function callback(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-              createMarker(results[i]);
-              listRest.push(results[i]);
-          }
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+        listRest.push(results[i]);
       }
-      $scope.restaurants = listRest;
-      console.log(listRest);
-      document.getElementById("btn").click();
+    }
+    $scope.restaurants = listRest;
+    console.log(listRest);
+    document.getElementById("btn").click();
   }
 
   // create marker for place
   function createMarker(place) {
-      //var placeLoc = place.geometry.location;
-      var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location
-      });
+    //var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location
+    });
 
-      // when clicked on marker, show name and rating of place
-      google.maps.event.addListener(marker, 'click', function () {
-          infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + '\nRating: ' + place.rating);
-          infowindow.open(map, this);
-      });
+    // when clicked on marker, show name and rating of place
+    google.maps.event.addListener(marker, 'click', function () {
+      infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + '\nRating: ' + place.rating);
+      infowindow.open(map, this);
+    });
   }
 
   $scope.showRestaurants = function(){
@@ -181,7 +212,7 @@ angular.module('starter.controllers', [])
           parseUser = Parse.User.current();
         },
         error: function(user, error) {
-          alert("Error: " + error.code + " " + error.message);
+          console.log("Error: " + error.code + " " + error.message);
         }
       });
     }
@@ -309,14 +340,19 @@ angular.module('starter.controllers', [])
 
   $scope.wait = function(){
     console.log("Clicked to wait");
-    console.log($scope.rId);
+
+    var Restaurant = Parse.Object.extend("Restaurant");
+    var r = new Restaurant();
+    r.set("restaurantId", $scope.rId);
+    r.set("name", $scope.rName);
+    r.save();
+    // TODO : check if this restaurant is already in the database
 
     var WaitingList = Parse.Object.extend("WaitingList");
     var waiting_list = new WaitingList();
-    waiting_list.set("userId", parseUser.id);
-    waiting_list.set("restaurantId", $scope.rId);
+    waiting_list.set("user", parseUser);
+    waiting_list.set("restaurant", r);
     waiting_list.save();
-    console.log(waiting_list);
   }
 })
 
