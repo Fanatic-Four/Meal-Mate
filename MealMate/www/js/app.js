@@ -135,12 +135,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
-    .state('tab.chat-detail', {
+    .state('tab.restaurant-detail', {
       url: '/restaurant/:rName/:rId',
       views: {
         'tab-restaurants': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+          templateUrl: 'templates/restaurant-detail.html',
+          controller: 'RestaurantDetailCtrl'
         }
       }
     })

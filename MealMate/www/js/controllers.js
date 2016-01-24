@@ -296,11 +296,21 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams) {
+.controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId
   console.log($stateParams);
   console.log("in detail controller");
+
+  $scope.join = function(){
+    console.log("Clicked to join");
+    console.log($scope.rId);
+  }
+
+  $scope.wait = function(){
+    console.log("Clicked to wait");
+    console.log($scope.rId);
+  }
 })
 
 .controller('AccountCtrl', function($scope) {
