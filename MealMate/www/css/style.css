@@ -26,11 +26,26 @@
   animation-duration:0;
 }
 
-.status-item .status-item2 {
+.status-item .status-item2 .status-item3 {
   padding: 5px;
   font: 18px;
   text-align: center;
 }
+
+.status-item3.ng-enter {
+  -webkit-animation: fadeInRight 1s;
+  animation: fadeInRight 1s;
+}
+
+.status-item3.ng-enter-stagger {
+  -webkit-animation-delay:200ms;
+  animation-delay:200ms;
+
+  /* override to make sure it's not inherited from other styles */
+  -webkit-animation-duration:0;
+  animation-duration:0;
+}
+
 
 a {
   text-decoration: none;
