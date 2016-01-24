@@ -1,11 +1,13 @@
-<ion-view view-title="Status" class="tabView">
+<ion-view view-title="Status" class="tabView" cache-view="false">
   <ion-content class="padding">
-    <h2 class="animated status-item" style="color: #00ccff;">
-      Welcome to Meal Mate
-    </h2>
+    <div style="text-align: center;">          
+      <h2 class="animated status-item" style="color: #00ccff;">
+        Welcome to Meal Mate
+      </h2>
 
-    <div ng-repeat="update in updates" class="status-item card">
-      {{update}}
+      <div ng-repeat="update in updates" class="status-item card">
+        {{update}}
+      </div>
     </div>
     <!--
     <div id="status" class="animated fadeInLeft">
@@ -23,14 +25,14 @@
   <div class="item item-text-wrap">
     <div class="card">
 
-      <div class="list" ng-repeat="rest in restaurants">
+      <div class="list status-item2" ng-repeat="rest in restaurants">
 
         <div class="item item-divider">
           {{rest.get("name")}}
         </div>
 
         <a class="item" href="#">
-          this will be the address.
+          {{rest.get("address")}}
         </a>
       </div>
     </div>

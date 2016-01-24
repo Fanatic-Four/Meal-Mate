@@ -253,7 +253,7 @@ angular.module('starter.controllers', [])
 
   $scope.timePickerObjectFrom = {
     inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-    step: 15,  //Optional
+    step: 5,  //Optional
     format: 12,  //Optional
     titleLabel: '12-hour Format',  //Optional
     closeLabel: 'Close',  //Optional
@@ -267,7 +267,7 @@ angular.module('starter.controllers', [])
 
   $scope.timePickerObjectTo = {
     inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-    step: 15,  //Optional
+    step: 5,  //Optional
     format: 12,  //Optional
     titleLabel: '12-hour Format',  //Optional
     closeLabel: 'Close',  //Optional
@@ -344,7 +344,7 @@ angular.module('starter.controllers', [])
   };
 
   $scope.logout = function() {
-    var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+    var ref = new Firebase("https://burning-fire-7390.firebaseio.com");
     ref.unauth();
     $state.go('login');
   };
@@ -354,6 +354,11 @@ angular.module('starter.controllers', [])
 .controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId;
+  $scope.rAddr = $stateParams.rAddr;
+  $scope.rRating = $stateParams.rRating;
+  $scope.rPrice = $stateParams.rPrice;
+  $scope.rAddr = $stateParams.rAddr;  
+
   console.log($stateParams);
   console.log("in detail controller");
 
@@ -403,6 +408,7 @@ angular.module('starter.controllers', [])
     var r = new Restaurant();
     r.set("restaurantId", $scope.rId);
     r.set("name", $scope.rName);
+    r.set("address", $scope.rAddr);
     r.save();
     console.log(r);
     // TODO : check if this restaurant is already in the database
@@ -414,6 +420,8 @@ angular.module('starter.controllers', [])
     waiting_list.set("restaurant", r);
     waiting_list.save();
     console.log(waiting_list);
+
+    alert("You are waiting at " + $scope.rName);
   }
 })
 
@@ -427,8 +435,10 @@ angular.module('starter.controllers', [])
   $scope.isWaiting = parseUser.get("isWaiting");
 
   $scope.logOut = function() {
-    Parse.User.logOut();
-    $state.go('signin')
+    Parse.User.logOut().then(function() {
+      $state.go('signin');
+      console.log("Sign in page redirect");
+    });
   }
 
   $scope.chat = function() {
