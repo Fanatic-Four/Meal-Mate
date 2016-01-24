@@ -453,6 +453,10 @@ angular.module('starter.controllers', [])
   console.log($stateParams);
   console.log("in detail controller");
 
+  $scope.users_waiting = [];
+  $scope.userObjects = [];
+  $scope.userTime = [];
+
   var WaitingList = Parse.Object.extend("WaitingList");
   var query = new Parse.Query(WaitingList);
   console.log($scope.rId);
@@ -471,16 +475,35 @@ angular.module('starter.controllers', [])
         var user = results[i].get("user");
         uQuery.get(user.id, {
           success: function(person){
+
             if(person.id != Parse.User.current().id){
-              $scope.users_waiting.push(person.getUsername());
               $scope.userObjects.push(person);
+              var WaitingTime = Parse.Object.extend("WaitingTime");
+              console.log(WaitingTime);
+              var queryTime = new Parse.Query(WaitingTime);
+              console.log(queryTime);
+              console.log(queryTime.equalTo("userId", user.id));
+              console.log(user.id);
+              queryTime.equalTo("userId", user.id)
+              .find({
+                success: function(entry){
+                  console.log(entry);
+                  console.log(new Date(entry[0].get("from")));
+                  console.log(new Date(entry[0].get("to")));
+                  var timeFrom = new Date(entry[0].get("from"));
+                  var timeTo = new Date(entry[0].get("to"));
+                  // var fromHour = ti
+                  time = timeFrom.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1") + " - " + timeTo.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                  $scope.users_waiting.push({name: person.getUsername(), time: time});
+                }
+              })
             }
+
           }
         })
       }
     },
   });
-
 
   $scope.join = function(username){
     console.log($scope.users_waiting); // don't delete this
@@ -489,7 +512,7 @@ angular.module('starter.controllers', [])
     console.log(username);
     uQuery = new Parse.Query(Parse.User);
 
-    uQuery.equalTo("username", username)
+    uQuery.equalTo("username", username.name)
     .find({
       success: function(user){
         //Remove all instances of the-user-you-joined from Waitinglist
@@ -545,8 +568,8 @@ angular.module('starter.controllers', [])
     curr.set("isWaiting", "no");
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
-    $state.go('tab.status');
-    window.location = "index.html";
+    // $state.go('tab.status');
+    // window.location = "index.html";
 
   } //end join function
 
