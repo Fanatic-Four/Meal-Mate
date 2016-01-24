@@ -8,6 +8,20 @@ angular.module('starter.controllers', [])
   "Click on Account to edit your profile description",
   "Happy eats!"];
 
+  $scope.doRefresh = function() {
+    /*
+   $http.get('/new-items')
+    .success(function(newItems) {
+      $scope.items = newItems;
+    })
+    .finally(function() {
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+    */
+    $scope.$broadcast('scroll.refreshComplete');
+ };
+
   if (parseUser.get("isWaiting") == "yes") {
     var WaitingList = Parse.Object.extend("WaitingList");
     var query = new Parse.Query(WaitingList);
