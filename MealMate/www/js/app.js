@@ -162,8 +162,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   }
   else {
     // isWaiting or open to wait at restaurants
-    
-    $urlRouterProvider.otherwise('/tab/status');
+    if (parseUser.get("isWaiting") == "yes") {
+      $urlRouterProvider.otherwise('/tab/status');
+    } else {
+      $urlRouterProvider.otherwise('/dining-time');
+    }
   }
 
 })

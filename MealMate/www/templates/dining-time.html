@@ -10,7 +10,7 @@
         <div class="item item-text-wrap">
           <ionic-timepicker input-obj="timePickerObjectFrom">
             <button class="button button-block button-positive overflowShow">
-              <standard-time-meridian etime='timePickerObjectFrom.fromEpochTime'></standard-time-meridian>
+              <standard-time-meridian etime='timePickerObjectFrom.inputEpochTime'></standard-time-meridian>
             </button>
           </ionic-timepicker>
         </div>
@@ -20,9 +20,14 @@
         <div class="item item-text-wrap">
           <ionic-timepicker input-obj="timePickerObjectTo">
             <button class="button button-block button-positive overflowShow">
-              <standard-time-meridian etime='timePickerObjectTo.toEpochTime'></standard-time-meridian>
+              <standard-time-meridian etime='timePickerObjectTo.inputEpochTime'></standard-time-meridian>
             </button>
           </ionic-timepicker>
+        </div>
+        <div class="item item-divider">
+          <button class="button button-block button-balanced" ng-click="setDiningTime(timePickerObjectFrom.inputEpochTime, timePickerObjectTo.inputEpochTime)">
+            Set
+          </button>
         </div>
       </div>
   </ion-content>

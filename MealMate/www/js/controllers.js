@@ -4,9 +4,9 @@ angular.module('starter.controllers', [])
   console.log("Status Controller Activated");
 
   $scope.updates = ["No one is currently matched with you",
-                    "Click on Restaurants if you are interested in eating with someone",
-                    "Click on Account to edit your profile description",
-                    "Happy eats!"];
+  "Click on Restaurants if you are interested in eating with someone",
+  "Click on Account to edit your profile description",
+  "Happy eats!"];
 })
 
 .controller('RestaurantsCtrl', function($scope, Chats) {
@@ -36,74 +36,108 @@ angular.module('starter.controllers', [])
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
-    Parse.User.logIn(user.username, user.password, {
-      success: function(user) {
-        // Do stuff after successful login.
-        alert("Successfully logged in");
-        $state.go('tab.status');
-        parseUser = Parse.User.current();
-      },
-      error: function(user, error) {
-        alert("Error: " + error.code + " " + error.message);
-        // The login failed. Check error to see why.
-        // $state.go('tab.restaurants');
-      }
-    });
+    if (user !== undefined) {
+      Parse.User.logIn(user.username, user.password, {
+        success: function(user) {
+          // Do stuff after successful login.
+          console.log(user.get("isWaiting"));
+          console.log(user.get("isWaiting") == 'yes');
+          if(user.get("isWaiting") == 'yes') {
+            $state.go('tab.status');
+          } else {
+            $state.go('diningtime');
+          }
+          parseUser = Parse.User.current();
+        },
+        error: function(user, error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+    }
 
   };
 })
 
-.controller('DiningTimeCtrl', function ($scope, $ionicPopup) {
+.controller('DiningTimeCtrl', function ($scope, $state, $ionicPopup) {
 
-    $scope.timePickerObjectFrom = {
-      fromEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-      step: 15,  //Optional
-      format: 12,  //Optional
-      titleLabel: '12-hour Format',  //Optional
-      closeLabel: 'Close',  //Optional
-      setLabel: 'Set',  //Optional
-      setButtonType: 'button-positive',  //Optional
-      closeButtonType: 'button-stable',  //Optional
-      callback: function (val) {    //Mandatory
-        timePickerFromCallback(val);
-      }
-    };
+  $scope.setDiningTime = function(from, to) {
+    console.log(from);
+    console.log(to);
+    console.log(parseUser.get("isWaiting"));
 
-    $scope.timePickerObjectTo = {
-      toEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-      step: 15,  //Optional
-      format: 12,  //Optional
-      titleLabel: '12-hour Format',  //Optional
-      closeLabel: 'Close',  //Optional
-      setLabel: 'Set',  //Optional
-      setButtonType: 'button-positive',  //Optional
-      closeButtonType: 'button-stable',  //Optional
-      callback: function (val) {    //Mandatory
-        timePickerToCallback(val);
-      }
-    };
+    if( to > from ) {
+      var WaitingTime = Parse.Object.extend("WaitingTime");
+      var waiting_time = new WaitingTime();
+      waiting_time.set("userId", parseUser.id);
+      waiting_time.set("from", from * 1000);
+      waiting_time.set("to", to * 1000);
 
-    function timePickerFromCallback(val) {
-      if (typeof (val) === 'undefined') {
-        console.log('Time not selected');
-      } else {
-        $scope.timePickerObjectFrom.fromEpochTime = val;
-        var selectedTime = new Date(val * 1000);
-        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
-      }
+      waiting_time.save(null, {
+        success: function(waiting_time) {
+          console.log("Successfully saved waiting time");
+          parseUser.set("isWaiting", "yes");
+          parseUser.save();
+          $state.go('tab.restaurants');
+        },
+        error: function(waiting_time, error) {
+          console.log("Error on waiting time: " + error.code + " " + error.message);
+        }
+      });
+
+    } else {
+      alert("'To' should be after 'From'");
     }
+  };
 
-    function timePickerToCallback(val) {
-      if (typeof (val) === 'undefined') {
-        console.log('Time not selected');
-      } else {
-        $scope.timePickerObjectTo.toEpochTime = val;
-        var selectedTime = new Date(val * 1000);
-        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
-      }
+  $scope.timePickerObjectFrom = {
+    inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
+    step: 15,  //Optional
+    format: 12,  //Optional
+    titleLabel: '12-hour Format',  //Optional
+    closeLabel: 'Close',  //Optional
+    setLabel: 'Set',  //Optional
+    setButtonType: 'button-positive',  //Optional
+    closeButtonType: 'button-stable',  //Optional
+    callback: function (val) {    //Mandatory
+      timePickerFromCallback(val);
     }
+  };
 
-  })
+  $scope.timePickerObjectTo = {
+    inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
+    step: 15,  //Optional
+    format: 12,  //Optional
+    titleLabel: '12-hour Format',  //Optional
+    closeLabel: 'Close',  //Optional
+    setLabel: 'Set',  //Optional
+    setButtonType: 'button-positive',  //Optional
+    closeButtonType: 'button-stable',  //Optional
+    callback: function (val) {    //Mandatory
+      timePickerToCallback(val);
+    }
+  };
+
+  function timePickerFromCallback(val) {
+    if (typeof (val) === 'undefined') {
+      console.log('Time not selected');
+    } else {
+      $scope.timePickerObjectFrom.inputEpochTime = val;
+      var selectedTime = new Date(val * 1000);
+      console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+    }
+  }
+
+  function timePickerToCallback(val) {
+    if (typeof (val) === 'undefined') {
+      console.log('Time not selected');
+    } else {
+      $scope.timePickerObjectTo.inputEpochTime = val;
+      var selectedTime = new Date(val * 1000);
+      console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+    }
+  }
+
+})
 
 .controller('RegisterCtrl', function($scope, $state) {
 
@@ -116,6 +150,7 @@ angular.module('starter.controllers', [])
     parse_user.set("description", user.description);
     parse_user.set("age", user.age);
     parse_user.set("interests", user.interests);
+    parse_user.set("isWaiting", "no");
 
     parse_user.signUp(null, {
       success : function(parse_user){
@@ -126,8 +161,6 @@ angular.module('starter.controllers', [])
         console.log("Error: " + error.code + " " + error.message);
       }
     });
-
-
   }
 
 })
