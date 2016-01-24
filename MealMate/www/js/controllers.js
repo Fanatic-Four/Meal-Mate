@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
 .controller('StatusCtrl', function($scope) {
   console.log("Status Controller Activated");
 
-  $scope.updates = ["No one is currently matched with you",
+  $scope.updates = ["No one is currently matched with you.",
   "Click on Restaurants if you are interested in eating with someone",
   "Click on Account to edit your profile description",
   "Happy eats!"];
@@ -390,8 +390,8 @@ angular.module('starter.controllers', [])
             $scope.users_waiting.push(person.getUsername());
           }
         })
-        
-        
+
+
       }
     },
     });
@@ -407,22 +407,40 @@ angular.module('starter.controllers', [])
 
     var Restaurant = Parse.Object.extend("Restaurant");
     var r = new Restaurant();
-    r.set("restaurantId", $scope.rId);
-    r.set("name", $scope.rName);
-    r.set("address", $scope.rAddr);
-    r.save();
-    console.log(r);
-    // TODO : check if this restaurant is already in the database
+    var query = new Parse.Query(Restaurant);
+    query.equalTo("restaurantId", $scope.rId);
+    query.find({
+      success: function(results) {
+        if (results.length > 0) {
+          // already has restaurant
+          r = results[0];
+        } else {
+          // add new restaurant
+          r.set("restaurantId", $scope.rId);
+          r.set("name", $scope.rName);
+          r.save();
+        }
 
+        var WaitingList = Parse.Object.extend("WaitingList");
+        var waiting_list = new WaitingList();
+        // check if the user-restaurant is already in the WaitingList
+        var waitingListQuery = new Parse.Query(WaitingList);
+        waitingListQuery.equalTo("user", parseUser);
+        waitingListQuery.equalTo("restaurant", r);
 
-    var WaitingList = Parse.Object.extend("WaitingList");
-    var waiting_list = new WaitingList();
-    waiting_list.set("user", parseUser);
-    waiting_list.set("restaurant", r);
-    waiting_list.save();
-    console.log(waiting_list);
-
-    alert("You are waiting at " + $scope.rName);
+        waitingListQuery.find({
+          success: function(results) {
+            if (results.length == 0) {
+              // this user has no record of waiting here
+              waiting_list.set("user", parseUser);
+              waiting_list.set("restaurant", r);
+              waiting_list.save();
+              console.log(waiting_list);
+            }
+          }
+        })
+      },
+    });
   }
 })
 
