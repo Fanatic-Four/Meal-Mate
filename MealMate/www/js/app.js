@@ -136,9 +136,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+      url: '/restaurant/:rName/:rId',
       views: {
-        'tab-chats': {
+        'tab-restaurants': {
           templateUrl: 'templates/chat-detail.html',
           controller: 'ChatDetailCtrl'
         }

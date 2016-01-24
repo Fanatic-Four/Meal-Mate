@@ -1,4 +1,4 @@
-<ion-view view-title="Account">
+<ion-view view-title="Account" class="tabView">
   <ion-content>
     <div class="list card">
       <div class="item item-image">
@@ -8,16 +8,44 @@
       </div>
 
       <div class="item">
-        Name
+        <span style="float: left">
+          Name
+        </span>
+        <span style="float: right">
+          {{username}}
+        </span>
       </div>
       <div class="item">
-        Email
+        <span style="float: left">
+          Age
+        </span>
+        <span style="float: right">
+          {{age}}
+        </span>
       </div>
       <div class="item">
-        Profile Description
+        <span style="float: left">
+          Profile Description
+        </span>
+        <span style="float: right">
+          {{description}}
+        </span>
       </div>
       <div class="item">
-        Interests
+        <span style="float: left">
+          Interests
+        </span>
+        <span style="float: right">
+          {{interests}}
+        </span>
+      </div>
+      <div class="item">
+        <span style="float: left">
+          Waiting?
+        </span>
+        <span style="float: right">
+          {{isWaiting}}
+        </span>
       </div>
     </div>
   </ion-content>
