@@ -142,7 +142,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.restaurant-detail', {
-      url: '/restaurant/:rName/:rId/:rAddr',
+      url: '/restaurant/:rName/:rId/:rAddr/:rRating/:rPrice',
       views: {
         'tab-restaurants': {
           templateUrl: 'templates/restaurant-detail.html',

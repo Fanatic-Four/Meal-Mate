@@ -355,6 +355,10 @@ angular.module('starter.controllers', [])
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId;
   $scope.rAddr = $stateParams.rAddr;
+  $scope.rRating = $stateParams.rRating;
+  $scope.rPrice = $stateParams.rPrice;
+  $scope.rAddr = $stateParams.rAddr;  
+
   console.log($stateParams);
   console.log("in detail controller");
 
