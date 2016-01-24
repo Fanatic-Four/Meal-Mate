@@ -47,28 +47,26 @@
         }
 
     </style>
-    <button id="startrunning" ng-click="showMap()">Show Map</button>
+    <!-- <button id="startrunning" ng-click="showMap()">Show Map</button> -->
     <!-- <ion-content> -->
     <div id="map"></div>
      <!--  </ion-content> -->
     <input id="origin-input" class="controls" type="text" placeholder="Origin">
+
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right"
-        ng-repeat="r in restaurants"
+        collection-repeat="r in restaurants"
         type="item-text-wrap"
-        href="#/tab/restaurant/{{r.name}}/{{r.id}}"
-        ng-click="navigateToDetails(r)">
+        href="#/tab/restaurant/{{r.name}}/{{r.id}}">
         <!-- <img ng-src="{{chat.face}}"> -->
         <h2>{{r.name}}</h2>
         <p>Rating: {{r.rating}}</p>
         <p>Open now: {{r.opening_hours.open_now}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
 
-        <ion-option-button class="button-assertive" ng-click="remove(r)">
-          Delete
-        </ion-option-button>
       </ion-item>
     </ion-list>
-    <button ng-click="showRestaurant()">Show restaurants</button>
+
+    <button ng-click="showRestaurants()" id="btn" style="display: none">Show restaurants</button>
   </ion-content>
 </ion-view>
