@@ -512,7 +512,7 @@ angular.module('starter.controllers', [])
     console.log(username);
     uQuery = new Parse.Query(Parse.User);
 
-    uQuery.equalTo("username", username)
+    uQuery.equalTo("username", username.name)
     .find({
       success: function(user){
         //Remove all instances of the-user-you-joined from Waitinglist
@@ -568,8 +568,8 @@ angular.module('starter.controllers', [])
     curr.set("isWaiting", "no");
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
-    $state.go('tab.status');
-    window.location = "index.html";
+    // $state.go('tab.status');
+    // window.location = "index.html";
 
   } //end join function
 
