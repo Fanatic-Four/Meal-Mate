@@ -313,7 +313,7 @@ angular.module('starter.controllers', [])
   };
 
   $scope.logout = function() {
-    var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+    var ref = new Firebase("https://burning-fire-7390.firebaseio.com");
     ref.unauth();
     $state.go('login');
   };
@@ -358,8 +358,9 @@ angular.module('starter.controllers', [])
   $scope.isWaiting = parseUser.get("isWaiting");
 
   $scope.logOut = function() {
-    Parse.User.logOut();
-    $state.go('signin')
+    Parse.User.logOut().then(function() {
+      $state.go('signin');
+    });
   }
 
   $scope.chat = function() {
