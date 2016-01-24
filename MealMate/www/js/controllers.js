@@ -253,7 +253,7 @@ angular.module('starter.controllers', [])
 
   $scope.timePickerObjectFrom = {
     inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-    step: 15,  //Optional
+    step: 5,  //Optional
     format: 12,  //Optional
     titleLabel: '12-hour Format',  //Optional
     closeLabel: 'Close',  //Optional
@@ -267,7 +267,7 @@ angular.module('starter.controllers', [])
 
   $scope.timePickerObjectTo = {
     inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
-    step: 15,  //Optional
+    step: 5,  //Optional
     format: 12,  //Optional
     titleLabel: '12-hour Format',  //Optional
     closeLabel: 'Close',  //Optional
@@ -344,7 +344,7 @@ angular.module('starter.controllers', [])
   };
 
   $scope.logout = function() {
-    var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+    var ref = new Firebase("https://burning-fire-7390.firebaseio.com");
     ref.unauth();
     $state.go('login');
   };
@@ -397,8 +397,10 @@ angular.module('starter.controllers', [])
   $scope.isWaiting = parseUser.get("isWaiting");
 
   $scope.logOut = function() {
-    Parse.User.logOut();
-    $state.go('signin')
+    Parse.User.logOut().then(function() {
+      $state.go('signin');
+      console.log("Sign in page redirect");
+    });
   }
 
   $scope.chat = function() {
