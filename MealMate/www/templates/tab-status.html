@@ -9,18 +9,38 @@
     </div>
     <!--
     <div id="status" class="animated fadeInLeft">
-      No one is currently matched with you
+    No one is currently matched with you
+  </div>
+
+  <div id="second" class="animated fadeInRight">
+  Click on restaurants if you are interested in eating with someone
+</div>
+-->
+<div class="card">
+  <div class="item item-divider">
+    You are waiting at..
+  </div>
+  <div class="item item-text-wrap">
+    <div class="card">
+
+      <div class="list" ng-repeat="rest in restaurants">
+
+        <div class="item item-divider">
+          {{rest.get("name")}}
+        </div>
+
+        <a class="item" href="#">
+          this will be the address.
+        </a>
+      </div>
     </div>
+  </div>
+</div>
+<script>
 
-    <div id="second" class="animated fadeInRight">
-      Click on restaurants if you are interested in eating with someone
-    </div>
-  -->
-    <script>
+</script>
 
-    </script>
-
-  </ion-content>
+</ion-content>
 
 
 
