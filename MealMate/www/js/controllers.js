@@ -311,12 +311,15 @@ angular.module('starter.controllers', [])
     console.log("Clicked to wait");
     console.log($scope.rId);
 
+
     var WaitingList = Parse.Object.extend("WaitingList");
     var waiting_list = new WaitingList();
     waiting_list.set("userId", parseUser.id);
     waiting_list.set("restaurantId", $scope.rId);
     waiting_list.save();
     console.log(waiting_list);
+
+    alert("You are waiting at " + $scope.rName);
   }
 })
 
