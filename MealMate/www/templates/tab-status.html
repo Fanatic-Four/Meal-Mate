@@ -1,16 +1,12 @@
 <ion-view view-title="Status" class="tabView" cache-view="false">
   <ion-content class="padding">
 
-    <ion-refresher
-      pulling-text="Pull to refresh..."
-      on-refresh="doRefresh()">
-    </ion-refresher>
-
     <div style="text-align: center;">
       <h2 class="" style="color: #00ccff;">
         Welcome to Meal Mate
       </h2>
     </div>
+
 
     <div style="text-align: center;">
       <div ng-repeat="update in updates" class="list status-item">
@@ -19,23 +15,16 @@
     </div>
 
     <div class="card" ng-if="restaurants.length!=0">
-      <div class="item item-divider item-button-right">
+      <div class="item item-divider">
         You are waiting at..
-        <!--<button class="button button-assertive" ng-click="deleteAll()">
-          Delete All
-        </button>-->
       </div>
-
       <div class="item item-text-wrap">
         <div class="card">
 
-          <div ng-repeat="rest in restaurants" class="list status-item3">
+          <div class="list status-item2" ng-repeat="rest in restaurants">
 
-            <div class="item item-divider item-button-right">
+            <div class="item item-divider">
               {{rest.get("name")}}
-              <button class="button" ng-click="delete(rest.id)">
-                <i class="icon ion-ios-trash"></i>
-              </button>
             </div>
 
             <a class="item" href="#">
@@ -46,10 +35,8 @@
       </div>
     </div>
 
-    <script>
-    </script>
 
-  </ion-content>
+</ion-content>
 
 
 
