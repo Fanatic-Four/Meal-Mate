@@ -16,7 +16,7 @@ angular.module('starter.controllers', [])
   // listen for the $ionicView.enter event:
   //
   $scope.$on('$ionicView.enter', function(e) {
-    console.log("banana");
+    //console.log("banana");
   });
 
   $scope.restaurants = null;
@@ -284,5 +284,5 @@ angular.module('starter.controllers', [])
   $scope.age = parseUser.get("age");
   $scope.description = parseUser.get("description");
   $scope.interests = parseUser.get("interests");
-  $scope.isWaiting = parseUser.get("isWaiting");  
+  $scope.isWaiting = parseUser.get("isWaiting");
 });
