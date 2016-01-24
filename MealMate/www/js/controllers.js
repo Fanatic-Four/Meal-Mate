@@ -49,10 +49,21 @@ angular.module('starter.controllers', [])
     });
   }
 
-  $scope.updateList = function() {
-    console.log($scope.restaurants);
+  $scope.delete = function(restaurantId) {
+    console.log("delete "+restaurantId);
+    var Restaurant = Parse.Object.extend("Restaurant");
+    var query = new Parse.Query(Restaurant);
+    query.get(restaurantId, {
+      success: function(rest) {
+        // The object was retrieved successfully.
+        rest.destroy({
+          success: function() {
+            window.location = "index.html";
+          }
+        });
+      },
+    })
   }
-
 })
 
 .controller('RestaurantsCtrl', function($scope, $state, Chats) {
@@ -429,7 +440,7 @@ angular.module('starter.controllers', [])
     },
     });
 
-  
+
   $scope.join = function(username){
     console.log($scope.users_waiting); // don't delete this
     console.log("Clicked to join");
@@ -484,7 +495,7 @@ angular.module('starter.controllers', [])
             }
           });
         }
-        
+
       }
     })
 
