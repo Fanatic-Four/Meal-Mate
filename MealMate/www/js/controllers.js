@@ -364,19 +364,7 @@ angular.module('starter.controllers', [])
 
   var WaitingList = Parse.Object.extend("WaitingList");
   var query = new Parse.Query(WaitingList);
-
-  var Restaurant = Parse.Object.extend("Restaurant");
-  var rQuery = new Parse.Query(Restaurant);
-  rQuery.equalTo("restaurantId", $scope.rId);
-  rQuery.find({
-    success: function(rest){
-      query.equalTo('restaurant', rest);
-    }
-  });
-
-  var uQuery = new Parse.Query(Parse.User);
-
-  $scope.users_waiting = [];
+  query.equalTo("restaurantId", $scope.rId);
 
   query.find({
     success: function(results) {
@@ -387,18 +375,47 @@ angular.module('starter.controllers', [])
         uQuery.get(user.id, {
           success: function(person){
             $scope.users_waiting.push(person.getUsername());
+            $scope.userObjects.push(person);
           }
         })
-        
-        
       }
     },
     });
 
-  $scope.join = function(){
+  var uQuery = new Parse.Query(Parse.User);
+
+  $scope.users_waiting = [];
+  $scope.userObjects = [];
+
+
+  $scope.join = function(username){
+    console.log($scope.users_waiting); // don't delete this
     console.log("Clicked to join");
-    console.log($scope.rId);
-    console.log($scope.users_waiting);
+    
+    uQuery.equalTo("username", username)
+    .find({
+      success: function(user){
+        //Remove all instances of currentUser from Waitinglist
+        var query = new Parse.Query(WaitingList);
+        query.equalTo("user", user);
+        query.find({
+          success: function(results){
+            for(var i = 0; i < results.length; i++){
+              results[i].destroy({
+                success: function(o){console.log("destroyed object");}
+              });
+            }
+          }
+        })
+
+        //Update current User's "isWaiting" to No
+
+        //Add current user to Join pool
+
+        //Do the same for the other (one you joined) user
+      }
+    })
+    
   }
 
   $scope.wait = function(){
@@ -418,6 +435,7 @@ angular.module('starter.controllers', [])
     var waiting_list = new WaitingList();
     waiting_list.set("user", parseUser);
     waiting_list.set("restaurant", r);
+    waiting_list.set("restaurantId", $scope.rId);
     waiting_list.save();
     console.log(waiting_list);
 
