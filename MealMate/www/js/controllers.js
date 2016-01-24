@@ -359,24 +359,33 @@ angular.module('starter.controllers', [])
 
   var WaitingList = Parse.Object.extend("WaitingList");
   var query = new Parse.Query(WaitingList);
-  query.equalTo('restaurantId', $scope.rId);
 
-  var User = Parse.Object.extend("User");
-  var uQuery = new Parse.Query(User);
+  var Restaurant = Parse.Object.extend("Restaurant");
+  var rQuery = new Parse.Query(Restaurant);
+  rQuery.equalTo("restaurantId", $scope.rId);
+  rQuery.find({
+    success: function(rest){
+      query.equalTo('restaurant', rest);
+    }
+  });
+
+  var uQuery = new Parse.Query(Parse.User);
 
   $scope.users_waiting = [];
 
   query.find({
     success: function(results) {
+      //Results is all the rows of the target restaurant
+      console.log(results);
       for (var i = 0; i < results.length; i++) {
-        var id = results[i].get("userId");
-
-        uQuery.get(id, {
-          success : function(result) {
-            $scope.users_waiting.push(result);
-            console.log(result);
+        var user = results[i].get("user");
+        uQuery.get(user.id, {
+          success: function(person){
+            $scope.users_waiting.push(person.getUsername());
           }
         })
+        
+        
       }
     },
     });
