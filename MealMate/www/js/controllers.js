@@ -303,7 +303,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams) {
+.controller('ChatDetailCtrl', function($scope, $stateParams, $state) {
   $scope.rName = $stateParams.rName;
   $scope.rId = $stateParams.rId
   console.log($stateParams);
@@ -318,4 +318,9 @@ angular.module('starter.controllers', [])
   $scope.description = parseUser.get("description");
   $scope.interests = parseUser.get("interests");
   $scope.isWaiting = parseUser.get("isWaiting");
+
+  $scope.logOut = function() {
+    Parse.User.logOut();
+    $state.go('signin')
+  }
 });
