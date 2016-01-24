@@ -403,8 +403,14 @@ angular.module('starter.controllers', [])
 
   var WaitingList = Parse.Object.extend("WaitingList");
   var query = new Parse.Query(WaitingList);
+  console.log($scope.rId);
   query.equalTo("restaurantId", $scope.rId);
 
+  var uQuery = new Parse.Query(Parse.User);
+  $scope.users_waiting = [];
+  $scope.userObjects = [];
+
+  //Display the people in WaitingList
   query.find({
     success: function(results) {
       //Results is all the rows of the target restaurant
@@ -413,52 +419,90 @@ angular.module('starter.controllers', [])
         var user = results[i].get("user");
         uQuery.get(user.id, {
           success: function(person){
-            $scope.users_waiting.push(person.getUsername());
-            $scope.userObjects.push(person);
+            if(person.id != Parse.User.current().id){
+              $scope.users_waiting.push(person.getUsername());
+              $scope.userObjects.push(person);
+            }
           }
         })
       }
     },
     });
 
-  var uQuery = new Parse.Query(Parse.User);
-
-  $scope.users_waiting = [];
-  $scope.userObjects = [];
-
-
+  
   $scope.join = function(username){
     console.log($scope.users_waiting); // don't delete this
     console.log("Clicked to join");
 
+    console.log(username);
+    uQuery = new Parse.Query(Parse.User);
+
     uQuery.equalTo("username", username)
     .find({
       success: function(user){
-        //Remove all instances of currentUser from Waitinglist
+        //Remove all instances of the-user-you-joined from Waitinglist
         var query = new Parse.Query(WaitingList);
-        query.equalTo("user", user);
+        console.log(user[0]);
+        console.log(parseUser);
+        query.equalTo("user", user[0]);
         query.find({
           success: function(results){
+            console.log("here");
+            console.log(results);
             for(var i = 0; i < results.length; i++){
               results[i].destroy({
                 success: function(o){console.log("destroyed object");}
               });
+              console.log("destroyed the user you joined with in waiting_list");
             }
           }
         })
 
-        //Update current User's "isWaiting" to No
+        //TODO: Update the-user-you-joined "isWaiting" to No
+        //but no write access
 
-        //Add current user to Join pool
+        //Add both users to Join pool
+        var Joined = new Parse.Object.extend("Joined");
+        var j = new Joined();
+        j.set("user1", user[0]);
+        j.set("user2", Parse.User.current());
+        j.save();
 
-        //Do the same for the other (one you joined) user
+      }
+    });
+
+    // Destroy curr user from waiting list
+    var query = new Parse.Query(WaitingList);
+    query.equalTo("user", Parse.User.current());
+    query.find({
+      success: function(curr){
+        console.log(curr[0]);
+        for(var i = 0; i < curr.length; i++){
+          curr[i].destroy({
+            success: function(res){
+              console.log("destroyed current user from Waiting List");
+            }
+          });
+        }
+        
       }
     })
 
-  }
+    // Update current user's isWaiting
+    var curr = Parse.User.current();
+    curr.set("isWaiting", "no");
+    curr.save();
+    console.log("curr isWaiting: " + curr.isWaiting);
+    $state.go('tab.status');
+  } //end join function
 
   $scope.wait = function(){
     console.log("Clicked to wait");
+
+    //Set current user's isWaiting field to yes
+    var curr = Parse.User.current();
+    curr.set("isWaiting", "yes");
+    curr.save();
 
     var Restaurant = Parse.Object.extend("Restaurant");
     var r = new Restaurant();
@@ -469,31 +513,57 @@ angular.module('starter.controllers', [])
         if (results.length > 0) {
           // already has restaurant
           r = results[0];
+
+          var WaitingList = Parse.Object.extend("WaitingList");
+          var waiting_list = new WaitingList();
+          // check if the user-restaurant is already in the WaitingList
+          var waitingListQuery = new Parse.Query(WaitingList);
+          waitingListQuery.equalTo("user", parseUser);
+          console.log("err r "+r);
+          waitingListQuery.equalTo("restaurant", r);
+
+          waitingListQuery.find({
+            success: function(results) {
+              if (results.length == 0) {
+                // this user has no record of waiting here
+                waiting_list.set("user", parseUser);
+                waiting_list.set("restaurant", r);
+                waiting_list.set("restaurantId", $scope.rId);
+                waiting_list.save();
+                console.log(waiting_list);
+              }
+            }
+          })
+
         } else {
           // add new restaurant
           r.set("restaurantId", $scope.rId);
           r.set("name", $scope.rName);
-          r.save();
-        }
+          r.set("address", $scope.rAddr);
+          r.save(null, {
+            success : function(res) {
 
-        var WaitingList = Parse.Object.extend("WaitingList");
-        var waiting_list = new WaitingList();
-        // check if the user-restaurant is already in the WaitingList
-        var waitingListQuery = new Parse.Query(WaitingList);
-        waitingListQuery.equalTo("user", parseUser);
-        waitingListQuery.equalTo("restaurant", r);
+              var WaitingList = Parse.Object.extend("WaitingList");
+              var waiting_list = new WaitingList();
+              // check if the user-restaurant is already in the WaitingList
+              var waitingListQuery = new Parse.Query(WaitingList);
+              waitingListQuery.equalTo("user", parseUser);
+              waitingListQuery.equalTo("restaurant", r);
 
-        waitingListQuery.find({
-          success: function(results) {
-            if (results.length == 0) {
-              // this user has no record of waiting here
-              waiting_list.set("user", parseUser);
-              waiting_list.set("restaurant", r);
-              waiting_list.save();
-              console.log(waiting_list);
+              waitingListQuery.find({
+                success: function(results) {
+                  if (results.length == 0) {
+                    // this user has no record of waiting here
+                    waiting_list.set("user", parseUser);
+                    waiting_list.set("restaurant", r);
+                    waiting_list.set("restaurantId", $scope.rId);
+                    waiting_list.save();
+                  }
+                }
+              })
             }
-          }
-        })
+          });
+        }
       },
     });
   }
