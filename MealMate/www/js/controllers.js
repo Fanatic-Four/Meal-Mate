@@ -298,7 +298,7 @@ angular.module('starter.controllers', [])
 
 .controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
-  $scope.rId = $stateParams.rId
+  $scope.rId = $stateParams.rId;
   console.log($stateParams);
   console.log("in detail controller");
 
