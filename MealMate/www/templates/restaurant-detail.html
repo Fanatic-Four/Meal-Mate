@@ -11,31 +11,28 @@
     <button class="button button-block button-positive" style="font-size: 20px;">
       Would you like to eat at
       <br>
-      {{rName}}?
+      <strong>{{rName}}?</strong>
       <br>
       {{rAddr}}
       <br>
       Rating: {{rRating}}/5
       <br>
-      Cost: {{rPrice}}/4 $'s
+      Cost: {{rPrice}}
     </button>
-
     
-
     <button id="wait" class="button button-block button-balanced" ng-click="wait()">
       Wait
     </button>
 
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right"
-                collection-repeat="user in users_waiting"
-                type="item-text-wrap">
-          <h2>{{user}}</h2>
-          <button class="button button-outline button-balanced join " style="float: right;" ng-click="join(user)">
-            Join
-          </button>
-      </ion-item>
-    </ion-list>
+    <div class="list">
+
+  <div class="item item-button-right" collection-repeat="user in users_waiting" type="item-text-wrap">
+    {{user}}
+    <button class="button button-outline button-balanced join " style="float: right;" ng-click="join(user)">
+      Join
+    </button>
+  </div>
+</div>
 
   </ion-content>
 </ion-view>

@@ -195,6 +195,24 @@ angular.module('starter.controllers', [])
     $state.go('tab.status');
   }
 
+  var ionicSuccess = function() {
+    ionicUser = Ionic.User.current();
+  }
+
+  var ionicFailure = function(id) {
+    // this will give you a fresh user or the previously saved 'current user'
+    ionicUser = Ionic.User.current();
+
+    // if the user doesn't have an id, you'll need to give it one.
+    if (!ionicUser.id) {
+      ionicUser.id = id;
+      // user.id = 'your-custom-user-id';
+    }
+
+    //persist the user
+    ionicUser.save();
+  }
+
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
@@ -204,12 +222,15 @@ angular.module('starter.controllers', [])
           // Do stuff after successful login.
           console.log(user.get("isWaiting"));
           console.log(user.get("isWaiting") == 'yes');
+          parseUser = Parse.User.current();
+
+          Ionic.User.load(user.id).then(ionicSuccess, ionicFailure(user.id));
+
           if(user.get("isWaiting") == 'yes') {
             $state.go('tab.status');
           } else {
             $state.go('diningtime');
           }
-          parseUser = Parse.User.current();
         },
         error: function(user, error) {
           console.log("Error: " + error.code + " " + error.message);
@@ -335,8 +356,8 @@ angular.module('starter.controllers', [])
   $scope.addMessage = function() {
 
     $ionicPopup.prompt({
-      title: 'Need to get something off your chest?',
-      template: 'Let everybody know!'
+      title: 'Send message',
+      template: 'Let them know you if you want to change plans!'
     }).then(function(res) {
       $scope.messages.$add({
         "message": res
@@ -357,7 +378,9 @@ angular.module('starter.controllers', [])
   $scope.rId = $stateParams.rId;
   $scope.rAddr = $stateParams.rAddr;
   $scope.rRating = $stateParams.rRating;
-  $scope.rPrice = $stateParams.rPrice;
+  var dollar = "";
+  for(i = 0 ; i < $stateParams.rPrice; i++) dollar+="$";
+  $scope.rPrice = dollar;
   $scope.rAddr = $stateParams.rAddr;
 
   console.log($stateParams);
@@ -397,7 +420,8 @@ angular.module('starter.controllers', [])
     console.log("Clicked to join");
 
     console.log(username);
-    uQery = new Parse.Query(Parse.User);
+    uQuery = new Parse.Query(Parse.User);
+
     uQuery.equalTo("username", username)
     .find({
       success: function(user){
@@ -411,18 +435,19 @@ angular.module('starter.controllers', [])
             console.log("here");
             console.log(results);
             for(var i = 0; i < results.length; i++){
-              // results[i].destroy({
-              //   success: function(o){console.log("destroyed object");}
-              // });
-              console.log("would destroy");
+              results[i].destroy({
+                success: function(o){console.log("destroyed object");}
+              });
+              console.log("destroyed the user you joined with in waiting_list");
             }
           }
         })
 
-        //Update the-user-you-joined "isWaiting" to No
+        //TODO: Update the-user-you-joined "isWaiting" to No
         //but no write access
 
-        //Add that both users to Join pool
+        //Add both users to Join pool
+        var Joined = new Parse.Object.extend("Joined");
         var j = new Joined();
         j.set("user1", user[0]);
         j.set("user2", Parse.User.current());
@@ -437,8 +462,8 @@ angular.module('starter.controllers', [])
     query.find({
       success: function(curr){
         console.log(curr[0]);
-        if(!!curr){
-          curr[0].destroy({
+        for(var i = 0; i < curr.length; i++){
+          curr[i].destroy({
             success: function(res){
               console.log("destroyed current user from Waiting List");
             }
@@ -447,12 +472,14 @@ angular.module('starter.controllers', [])
         
       }
     })
+
     // Update current user's isWaiting
     var curr = Parse.User.current();
     curr.set("isWaiting", "no");
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
-  }
+    $state.go('tab.status');
+  } //end join function
 
   $scope.wait = function(){
     console.log("Clicked to wait");
@@ -471,32 +498,57 @@ angular.module('starter.controllers', [])
         if (results.length > 0) {
           // already has restaurant
           r = results[0];
+
+          var WaitingList = Parse.Object.extend("WaitingList");
+          var waiting_list = new WaitingList();
+          // check if the user-restaurant is already in the WaitingList
+          var waitingListQuery = new Parse.Query(WaitingList);
+          waitingListQuery.equalTo("user", parseUser);
+          console.log("err r "+r);
+          waitingListQuery.equalTo("restaurant", r);
+
+          waitingListQuery.find({
+            success: function(results) {
+              if (results.length == 0) {
+                // this user has no record of waiting here
+                waiting_list.set("user", parseUser);
+                waiting_list.set("restaurant", r);
+                waiting_list.set("restaurantId", $scope.rId);
+                waiting_list.save();
+                console.log(waiting_list);
+              }
+            }
+          })
+
         } else {
           // add new restaurant
           r.set("restaurantId", $scope.rId);
           r.set("name", $scope.rName);
-          r.save();
-        }
+          r.set("address", $scope.rAddr);
+          r.save(null, {
+            success : function(res) {
 
-        var WaitingList = Parse.Object.extend("WaitingList");
-        var waiting_list = new WaitingList();
-        // check if the user-restaurant is already in the WaitingList
-        var waitingListQuery = new Parse.Query(WaitingList);
-        waitingListQuery.equalTo("user", parseUser);
-        waitingListQuery.equalTo("restaurant", r);
+              var WaitingList = Parse.Object.extend("WaitingList");
+              var waiting_list = new WaitingList();
+              // check if the user-restaurant is already in the WaitingList
+              var waitingListQuery = new Parse.Query(WaitingList);
+              waitingListQuery.equalTo("user", parseUser);
+              waitingListQuery.equalTo("restaurant", r);
 
-        waitingListQuery.find({
-          success: function(results) {
-            if (results.length == 0) {
-              // this user has no record of waiting here
-              waiting_list.set("user", parseUser);
-              waiting_list.set("restaurant", r);
-              waiting_list.set("restaurantId", $scope.rId);
-              waiting_list.save();
-              console.log(waiting_list);
+              waitingListQuery.find({
+                success: function(results) {
+                  if (results.length == 0) {
+                    // this user has no record of waiting here
+                    waiting_list.set("user", parseUser);
+                    waiting_list.set("restaurant", r);
+                    waiting_list.set("restaurantId", $scope.rId);
+                    waiting_list.save();
+                  }
+                }
+              })
             }
-          }
-        })
+          });
+        }
       },
     });
   }
