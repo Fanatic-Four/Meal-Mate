@@ -320,11 +320,32 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, $state) {
+.controller('RestaurantDetailCtrl', function($scope, $stateParams) {
   $scope.rName = $stateParams.rName;
-  $scope.rId = $stateParams.rId
+  $scope.rId = $stateParams.rId;
   console.log($stateParams);
   console.log("in detail controller");
+
+  $scope.join = function(){
+    console.log("Clicked to join");
+    console.log($scope.rId);
+  }
+
+  $scope.wait = function(){
+    console.log("Clicked to wait");
+    console.log($scope.rId);
+
+
+    var WaitingList = Parse.Object.extend("WaitingList");
+    var waiting_list = new WaitingList();
+    waiting_list.set("userId", parseUser.id);
+    waiting_list.set("restaurantId", $scope.rId);
+    waiting_list.set("restaurantName", $scope.rName);
+    waiting_list.save();
+    console.log(waiting_list);
+
+    alert("You are waiting at " + $scope.rName);
+  }
 })
 
 .controller('AccountCtrl', function($scope, $state) {
