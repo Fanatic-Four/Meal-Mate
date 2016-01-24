@@ -213,6 +213,7 @@ angular.module('starter.controllers', [])
         },
         error: function(user, error) {
           console.log("Error: " + error.code + " " + error.message);
+          alert("Email/Password is incorrect");
         }
       });
     }
@@ -357,7 +358,7 @@ angular.module('starter.controllers', [])
   $scope.rAddr = $stateParams.rAddr;
   $scope.rRating = $stateParams.rRating;
   $scope.rPrice = $stateParams.rPrice;
-  $scope.rAddr = $stateParams.rAddr;  
+  $scope.rAddr = $stateParams.rAddr;
 
   console.log($stateParams);
   console.log("in detail controller");
