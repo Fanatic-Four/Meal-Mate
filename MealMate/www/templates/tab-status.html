@@ -5,17 +5,14 @@
       <h2 class="" style="color: #00ccff;">
         Welcome to Meal Mate
       </h2>
-        <div ng-repeat="update in updates" class="list">
-          {{update}}
-        </div>
     </div>
 
     <div class="card" ng-if="restaurants.length!=0">
       <div class="item item-divider item-button-right">
         You are waiting at..
-        <button class="button button-assertive" ng-click="deleteAll()">
+        <!--<button class="button button-assertive" ng-click="deleteAll()">
           Delete All
-        </button>
+        </button>-->
       </div>
       <div class="item item-text-wrap">
         <div class="card">
@@ -37,6 +34,11 @@
       </div>
     </div>
 
+    <div style="text-align: center;">
+      <div ng-repeat="update in updates" class="list">
+        {{update}}
+      </div>
+    </div>
 
     <script>
     </script>
