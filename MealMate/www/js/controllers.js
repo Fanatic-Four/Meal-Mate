@@ -378,7 +378,9 @@ angular.module('starter.controllers', [])
   $scope.rId = $stateParams.rId;
   $scope.rAddr = $stateParams.rAddr;
   $scope.rRating = $stateParams.rRating;
-  $scope.rPrice = $stateParams.rPrice;
+  var dollar = "";
+  for(i = 0 ; i < $stateParams.rPrice; i++) dollar+="$";
+  $scope.rPrice = dollar;
   $scope.rAddr = $stateParams.rAddr;
 
   console.log($stateParams);
