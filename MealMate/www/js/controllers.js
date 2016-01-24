@@ -195,6 +195,24 @@ angular.module('starter.controllers', [])
     $state.go('tab.status');
   }
 
+  var ionicSuccess = function() {
+    ionicUser = Ionic.User.current();
+  }
+
+  var ionicFailure = function(id) {
+    // this will give you a fresh user or the previously saved 'current user'
+    ionicUser = Ionic.User.current();
+
+    // if the user doesn't have an id, you'll need to give it one.
+    if (!ionicUser.id) {
+      ionicUser.id = id;
+      // user.id = 'your-custom-user-id';
+    }
+
+    //persist the user
+    ionicUser.save();
+  }
+
   $scope.signIn = function(user) {
     console.log('Sign-In', user);
 
@@ -205,6 +223,9 @@ angular.module('starter.controllers', [])
           console.log(user.get("isWaiting"));
           console.log(user.get("isWaiting") == 'yes');
           parseUser = Parse.User.current();
+
+          Ionic.User.load(user.id).then(ionicSuccess, ionicFailure(user.id));
+
           if(user.get("isWaiting") == 'yes') {
             $state.go('tab.status');
           } else {
@@ -335,8 +356,8 @@ angular.module('starter.controllers', [])
   $scope.addMessage = function() {
 
     $ionicPopup.prompt({
-      title: 'Need to get something off your chest?',
-      template: 'Let everybody know!'
+      title: 'Send message',
+      template: 'Let them know you if you want to change plans!'
     }).then(function(res) {
       $scope.messages.$add({
         "message": res
@@ -392,7 +413,7 @@ angular.module('starter.controllers', [])
   $scope.join = function(username){
     console.log($scope.users_waiting); // don't delete this
     console.log("Clicked to join");
-    
+
     uQuery.equalTo("username", username)
     .find({
       success: function(user){
@@ -416,7 +437,7 @@ angular.module('starter.controllers', [])
         //Do the same for the other (one you joined) user
       }
     })
-    
+
   }
 
   $scope.wait = function(){
