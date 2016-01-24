@@ -316,6 +316,7 @@ angular.module('starter.controllers', [])
     var waiting_list = new WaitingList();
     waiting_list.set("userId", parseUser.id);
     waiting_list.set("restaurantId", $scope.rId);
+    waiting_list.set("restaurantName", $scope.rName);
     waiting_list.save();
     console.log(waiting_list);
 
