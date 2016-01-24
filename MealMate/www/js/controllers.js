@@ -386,6 +386,10 @@ angular.module('starter.controllers', [])
   console.log($stateParams);
   console.log("in detail controller");
 
+  $scope.users_waiting = [];
+  $scope.userObjects = [];
+  $scope.userTime = [];
+
   var WaitingList = Parse.Object.extend("WaitingList");
   var query = new Parse.Query(WaitingList);
   query.equalTo("restaurantId", $scope.rId);
@@ -398,8 +402,27 @@ angular.module('starter.controllers', [])
         var user = results[i].get("user");
         uQuery.get(user.id, {
           success: function(person){
-            $scope.users_waiting.push(person.getUsername());
+
             $scope.userObjects.push(person);
+            var WaitingTime = Parse.Object.extend("WaitingTime");
+            console.log(WaitingTime);
+            var queryTime = new Parse.Query(WaitingTime);
+            console.log(queryTime);
+            console.log(queryTime.equalTo("userId", user.id));
+            console.log(user.id);
+            queryTime.equalTo("userId", user.id)
+            .find({
+              success: function(entry){
+                console.log(entry);
+                console.log(new Date(entry[0].get("from")));
+                console.log(new Date(entry[0].get("to")));
+                var timeFrom = new Date(entry[0].get("from"));
+                var timeTo = new Date(entry[0].get("to"));
+                // var fromHour = ti
+                time = timeFrom.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1") + " - " + timeTo.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                $scope.users_waiting.push({name: person.getUsername(), time: time});
+              }
+            })
           }
         })
       }
@@ -408,8 +431,6 @@ angular.module('starter.controllers', [])
 
   var uQuery = new Parse.Query(Parse.User);
 
-  $scope.users_waiting = [];
-  $scope.userObjects = [];
 
 
   $scope.join = function(username){
@@ -474,6 +495,7 @@ angular.module('starter.controllers', [])
               // this user has no record of waiting here
               waiting_list.set("user", parseUser);
               waiting_list.set("restaurant", r);
+              waiting_list.set("restaurantId", $scope.rId);
               waiting_list.save();
               console.log(waiting_list);
             }

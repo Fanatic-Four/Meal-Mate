@@ -19,20 +19,34 @@
       <br>
       Cost: {{rPrice}}
     </button>
-    
+
     <button id="wait" class="button button-block button-balanced" ng-click="wait()">
       Wait
     </button>
 
-    <div class="list">
+  <div class="list">
 
-  <div class="item item-button-right" collection-repeat="user in users_waiting" type="item-text-wrap">
-    {{user}}
+  <div class="item item-button-right"
+    collection-repeat="user in users_waiting"
+    type="item-text-wrap">
+    <div>{{user.name}}</div>
+    <div>{{user.time}}</div>
+    <!-- <div class="item"
+      collection-repeat="time in userTime"
+      type="item-text-wrap">
+
+      <div>Time: {{time}}</div>
+    </div> -->
     <button class="button button-outline button-balanced join " style="float: right;" ng-click="join(user)">
       Join
     </button>
   </div>
-</div>
+
+
+
+  </div>
+
+
 
   </ion-content>
 </ion-view>
