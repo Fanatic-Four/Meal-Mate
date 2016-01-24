@@ -7,9 +7,14 @@
 <ion-view view-title="{{rName}}">
   <ion-content class="padding">
     <!-- <img ng-src="{{chat.face}}" style="width: 64px; height: 64px"> -->
-    <p>
-      Choose to wait or join with someone
-    </p>
+    <center>
+      <h5>
+        {{rAddr}}
+      </h5>
+      <p>
+        Choose to wait or join with someone
+      </p>
+    </center>
     <button id="join" ng-click="join()">Join</button>
     <button id="wait" ng-click="wait()">Wait</button>
   </ion-content>
