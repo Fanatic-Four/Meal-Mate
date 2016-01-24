@@ -47,13 +47,23 @@ angular.module('starter.controllers', [])
         for(var i = 0; i < entries.length; i++){
           console.log(entries[i].get("user2").getUsername());
           if(entries[i].get("user1").id == curr.id){
-            console.log("display user2")
-            $scope.match = entries[i].get("user2").getUsername();
+            console.log("display user2");
+            var uQuery = new Parse.Query(Parse.User);
+            uQuery.get(entries[i].get("user2").id, {
+              success: function(person){
+                $scope.match = person;
+              }
+            })
             console.log($scope.match);
           }
-          else if(entries[i].get("user2").id == curr.objectId){
-            console.log("display user1") 
-            $scope.match = entries[i].get("user1").getUsername();
+          else if(entries[i].get("user2").id == curr.id){
+            console.log("display user1")
+            var uQuery = new Parse.Query(Parse.User);
+            uQuery.get(entries[i].get("user1").id, {
+              success: function(person){
+                $scope.match = person;
+              }
+            })
           }
         }
       }
@@ -449,7 +459,7 @@ angular.module('starter.controllers', [])
         })
       }
     },
-    });
+  });
 
 
   $scope.join = function(username){

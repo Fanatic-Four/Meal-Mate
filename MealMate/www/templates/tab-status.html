@@ -7,36 +7,47 @@
       </h2>
     </div>
 
-<div class="card" ng-if="restaurants.length!=0">
-  <div class="item item-divider">
-    You are waiting at..
-  </div>
-  <div class="item item-text-wrap">
-    <div class="card">
+    <div class="card" ng-if="restaurants.length!=0 && isWaiting == 'yes'">
+      <div class="item item-divider item-button-right">
+        You are waiting at..
+        <!--<button class="button button-assertive" ng-click="deleteAll()">
+          Delete All
+        </button>-->
+      </div>
+      <div class="item item-text-wrap">
+        <div class="card">
 
-      <div class="list status-item2" ng-repeat="rest in restaurants">
+          <div class="list animated status-item2" ng-repeat="rest in restaurants">
 
-        <div class="item item-divider">
-          {{rest.get("name")}}
+            <div class="item item-divider item-button-right">
+              {{rest.get("name")}}
+              <button class="button" ng-click="delete(rest.id)">
+                <i class="icon ion-ios-trash"></i>
+              </button>
+            </div>
+
+            <a class="item" href="#">
+              {{rest.get("address")}}
+            </a>
+          </div>
         </div>
-
-        <a class="item" href="#">
-          {{rest.get("address")}}
-        </a>
       </div>
     </div>
-  </div>
-</div>
 
-<div style="text-align: center;">
-  <div ng-repeat="update in updates" class="list">
-    {{update}}
-  </div>
-</div>
-<script>
-</script>
+    <div class="card" ng-if="isWaiting != 'yes'">
+      {{match.get("username")}}
+    </div>
 
-</ion-content>
+    <div style="text-align: center;">
+      <div ng-repeat="update in updates" class="list">
+        {{update}}
+      </div>
+    </div>
+
+    <script>
+    </script>
+
+  </ion-content>
 
 
 
