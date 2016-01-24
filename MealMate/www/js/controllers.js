@@ -3,10 +3,11 @@ angular.module('starter.controllers', [])
 .controller('StatusCtrl', function($scope) {
   console.log("Status Controller Activated");
 
-  $scope.updates = ["No one is currently matched with you.",
-  "Click on Restaurants if you are interested in eating with someone",
-  "Click on Account to edit your profile description",
-  "Happy eats!"];
+  $scope.updates = [
+    "Click on Restaurants if you are interested in eating with someone",
+    "Click on Account to edit your profile description",
+    "Happy eats!"
+  ];
 
   $scope.doRefresh = function() {
     /*
@@ -20,7 +21,7 @@ angular.module('starter.controllers', [])
     });
     */
     $scope.$broadcast('scroll.refreshComplete');
-    window.location = "index.html";    
+    window.location = "index.html";
  };
 
   if (parseUser.get("isWaiting") == "yes") {
@@ -505,6 +506,7 @@ angular.module('starter.controllers', [])
     curr.save();
     console.log("curr isWaiting: " + curr.isWaiting);
     $state.go('tab.status');
+    window.location = "index.html";
   } //end join function
 
   $scope.wait = function(){

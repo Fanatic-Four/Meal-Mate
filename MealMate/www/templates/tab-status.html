@@ -12,6 +12,12 @@
       </h2>
     </div>
 
+    <div style="text-align: center;">
+      <div ng-repeat="update in updates" class="list status-item">
+        {{update}}
+      </div>
+    </div>
+
     <div class="card" ng-if="restaurants.length!=0">
       <div class="item item-divider item-button-right">
         You are waiting at..
@@ -19,10 +25,11 @@
           Delete All
         </button>-->
       </div>
+
       <div class="item item-text-wrap">
         <div class="card">
 
-          <div class="list animated status-item2" ng-repeat="rest in restaurants">
+          <div ng-repeat="rest in restaurants" class="list status-item3">
 
             <div class="item item-divider item-button-right">
               {{rest.get("name")}}
@@ -36,12 +43,6 @@
             </a>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div style="text-align: center;">
-      <div ng-repeat="update in updates" class="list">
-        {{update}}
       </div>
     </div>
 
