@@ -20,9 +20,7 @@
       Cost: {{rPrice}}
     </button>
 
-    <button id="join" class="button button-block button-balanced" ng-click="join()">
-      Join
-    </button>
+    
 
     <button id="wait" class="button button-block button-balanced" ng-click="wait()">
       Wait
@@ -33,6 +31,9 @@
                 collection-repeat="user in users_waiting"
                 type="item-text-wrap">
           <h2>{{user}}</h2>
+          <button class="button button-outline button-balanced join " style="float: right;" ng-click="join(user)">
+            Join
+          </button>
       </ion-item>
     </ion-list>
 
